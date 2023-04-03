@@ -1,11 +1,11 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRef } from "react";
 import Button from "../components/Button/Button";
 import Header from "../components/Header";
 
 const Home: NextPage = () => {
   return (
-    <>
+    <div>
       <Header />
 
       <section className="h-[100vh]" id="home">
@@ -47,7 +47,7 @@ const Home: NextPage = () => {
           <h1 className="text-5xl sm:text-8xl text-center font-bold">price</h1>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 
