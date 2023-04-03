@@ -22,13 +22,16 @@ interface RouteRenderProps {
 }
 
 const RouteRender = ({ markers, path }: RouteRenderProps) => {
+  // path 데이터를 api에서 사용할 수 있도록 형식을 바꿔줌
   const route_path = path.map((route: number[], id: number) => {
     const data = { lat: route[1], lng: route[0] };
     return data;
   });
 
+  // 마커가 클릭 이벤트를 위한 state
   const [activeMarker, setActiveMarker] = useState<number>(-1);
 
+  // 마커 클릭 이벤트
   const handleActiveMarker = (marker: number) => {
     if (marker === activeMarker) {
       return;
@@ -60,7 +63,7 @@ const RouteRender = ({ markers, path }: RouteRenderProps) => {
               }
             >
               <div>
-                <h2>{marker.station_name}</h2>
+                <h1>{marker.station_name}</h1>
               </div>
             </InfoWindowF>
           )}

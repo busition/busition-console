@@ -10,17 +10,25 @@ interface ConsoleHomeProps {
 }
 
 export default function ConsoleHome({ station_data, path }: ConsoleHomeProps) {
+  let center = { lat: 0, lng: 0 }; // 지도 중심좌표
+
+  // 모드 역에 대한 좌표값의 평균을 구한 점을 center로 설정한다.
+  for (let i = 0; i < station_data.length; i++) {
+    center.lat += station_data[i].station_latitude;
+    center.lng += station_data[i].station_longitude;
+  }
+
   return (
     <>
       <div className="w-screen h-screen">
         <GoogleMapViewer
           center={{
-            lat: station_data[0].station_latitude,
-            lng: station_data[0].station_longitude,
+            lat: center.lat / station_data.length,
+            lng: center.lng / station_data.length,
           }}
           markers={station_data}
           path={path}
-          zoom={18}
+          zoom={13}
         />
       </div>
     </>
