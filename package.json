@@ -2,11 +2,13 @@
   "name": "busition-web",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://wookingwoo.github.io/test-next-build",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "next build && next export && touch out/.nojekyll && git add -f out/ && git commit -m 'deploy to gh-pages' && git subtree push --prefix out origin gh-pages"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^13.2.4",
