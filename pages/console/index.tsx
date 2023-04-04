@@ -37,7 +37,7 @@ export default function ConsoleHome({ station_data, path }: ConsoleHomeProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { station_data, path } = await await fetch(
-    "http://api.dev.busition.com:8001/v1_1/route/1?shuttle_direction=0"
+    process.env.NEXT_PUBLIC_BUSITION_API
   ).then((res) => res.json());
 
   return {
