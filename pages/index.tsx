@@ -21,7 +21,7 @@ const Home: NextPage = () => {
               </h3>
               <h3 className="text-lg sm:text-2xl">지금 당장 Busition으로</h3>
             </div>
-            <Button text="Get started" primary={true} link="/console" />
+            <Button text="Get started" primary={true} link="/" />
           </div>
         </div>
       </section>
