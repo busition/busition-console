@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const debug = process.env.NODE_ENV !== "production";
-const repository = "test-next-build";
+const repository = process.env.NEXT_PUBLIC_BASE_PARAMS;
 
 const nextConfig = {
   reactStrictMode: true,
