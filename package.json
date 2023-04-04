@@ -2,13 +2,13 @@
   "name": "busition-web",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://wookingwoo.github.io/test-next-build",
+  "homepage": "https://kookmin-sw.github.io/capstone-2023-17",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "next build && next export && touch out/.nojekyll && git add -f out/ && git commit -m 'deploy to gh-pages' && git subtree push --prefix out origin gh-pages"
+    "deploy": "next build && next export && touch out/.nojekyll && git add -f out/ && git commit -m ':rocket: deploy to gh-pages' && git subtree push --prefix out origin gh-pages"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^13.2.4",
