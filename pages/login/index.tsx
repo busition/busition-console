@@ -1,29 +1,29 @@
-import React from "react";
-import { GoogleLogin, googleLogout, useGoogleLogin } from "@react-oauth/google";
-import styled from "styled-components";
+import { AuthAction, useAuthUser, withAuthUser } from "next-firebase-auth";
+import {} from "next-firebase-auth/";
+import React, { useState } from "react";
+import firebase from "firebase";
 
-const GoogleLoginButton = () => {
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => console.log(tokenResponse),
-  });
+const LoginPage = () => {
+  const AuthUser = useAuthUser();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
 
   return (
-    <div
-      className="w-full text-center border-[2px] px-[8px] py-[4px] rounded border-gray-500 cursor-pointer"
-      onClick={() => login()}
-    >
-      <h2>sign in with google</h2>
-    </div>
+    <div className="h-screen w-screen flex justify-center items-center "></div>
   );
 };
 
-export default function LoginPage() {
-  return (
-    <div className="h-screen w-screen flex justify-center items-center ">
-      <div className="flex flex-col h-[50vh] w-[30vw] justify-center items-center min-h-[350px] min-w-[250px]">
-        <h1 className="text-2xl mb-[10vh] font-bold">Sign in to Busition</h1>
-        <GoogleLoginButton />
-      </div>
-    </div>
-  );
-}
+export default withAuthUser({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+  whenUnauthedAfterInit: AuthAction.RENDER,
+})(LoginPage);

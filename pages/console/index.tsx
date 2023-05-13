@@ -3,13 +3,18 @@ import GoogleMapViewer from "../../components/GoogleMapViewer";
 import { GetServerSideProps } from "next";
 import { station_data } from "../../types/station.dto";
 import styled from "styled-components";
+import {
+  AuthAction,
+  withAuthUser,
+  withAuthUserTokenSSR,
+} from "next-firebase-auth";
 
 interface ConsoleHomeProps {
   station_data: station_data[];
   path: number[][];
 }
 
-export default function ConsoleHome({ station_data, path }: ConsoleHomeProps) {
+const ConsoleHome = ({ station_data, path }: ConsoleHomeProps) => {
   let center = { lat: 0, lng: 0 }; // 지도 중심좌표
 
   const [scheduleNo, setScheduleNo] = useState<number>(0);
@@ -48,20 +53,23 @@ export default function ConsoleHome({ station_data, path }: ConsoleHomeProps) {
       </div>
     </>
   );
-}
+};
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})(async () => {
   const { station_data, path } = await await fetch(
     process.env.NEXT_PUBLIC_BUSITION_API
   ).then((res) => res.json());
-
   return {
     props: { station_data, path },
   };
-};
+});
+
+export default withAuthUser()(ConsoleHome);
 
 const scheduleBox = (idx: number) => {
   return (
-    <div className="w-full h-[200px] bg-yellow-300 rounded-xl shadow-md cursor-pointer"></div>
+    <div className="w-full h-[200px] bg-[#FFE6AA] rounded-xl shadow-md cursor-pointer"></div>
   );
 };
