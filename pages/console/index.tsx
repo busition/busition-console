@@ -66,7 +66,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   };
 });
 
-export default withAuthUser()(ConsoleHome);
+export default withAuthUser<ConsoleHomeProps>()(ConsoleHome);
 
 const scheduleBox = (idx: number) => {
   return (
