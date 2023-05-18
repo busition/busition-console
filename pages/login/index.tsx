@@ -1,10 +1,9 @@
-import { AuthAction, useAuthUser, withAuthUser } from "next-firebase-auth";
-import {} from "next-firebase-auth/";
+import { AuthAction, withAuthUser } from "next-firebase-auth";
 import React, { useState } from "react";
 import firebase from "firebase";
+import Link from "next/link";
 
 const LoginPage = () => {
-  const AuthUser = useAuthUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -53,7 +52,6 @@ const LoginPage = () => {
                 />
               </div>
             </div>
-
             <div>
               <div className="flex items-center justify-between">
                 <label
@@ -62,14 +60,6 @@ const LoginPage = () => {
                 >
                   Password
                 </label>
-                <div className="text-sm">
-                  <a
-                    href="#"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
               </div>
               <div className="mt-2">
                 <input
@@ -94,16 +84,14 @@ const LoginPage = () => {
               </button>
             </div>
           </form>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{" "}
-            <a
-              href="#"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            >
-              Start a 14 day free trial
-            </a>
-          </p>
+          <Link href="/signup">
+            <p className="mt-10 text-center text-sm text-gray-500">
+              Not a member?{" "}
+              <a className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer">
+                Start a 14 day free trial
+              </a>
+            </p>
+          </Link>
         </div>
       </div>
     </>
