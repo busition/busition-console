@@ -2,6 +2,7 @@ import { AuthAction, withAuthUser } from "next-firebase-auth";
 import React, { useState } from "react";
 import firebase from "firebase";
 import Link from "next/link";
+import GoogleLoginButton from "../../components/Button/GoogleLoginButton";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -82,6 +83,7 @@ const LoginPage = () => {
               >
                 Sign in
               </button>
+              <GoogleLoginButton />
             </div>
           </form>
           <Link href="/signup">

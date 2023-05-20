@@ -5,6 +5,7 @@ import { station_data } from "../../types/station.dto";
 import styled from "styled-components";
 import {
   AuthAction,
+  useAuthUser,
   withAuthUser,
   withAuthUserTokenSSR,
 } from "next-firebase-auth";
