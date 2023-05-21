@@ -7,7 +7,7 @@ export default function GoogleLoginButton() {
       .auth()
       .signInWithPopup(provider)
       .then((result) => {
-        result.user?.getIdToken().then((token) => console.log(token));
+        result.user?.getIdToken().then((token) => {});
       })
       .catch((error) => {
         // Handle errors
