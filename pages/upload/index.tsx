@@ -1,4 +1,5 @@
 import { AuthAction, useAuthUser, withAuthUser } from "next-firebase-auth";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button/Button";
@@ -19,6 +20,7 @@ const Home = () => {
   const [tableRows, setTableRows] = useState<any[]>([]);
   const [values, setValues] = useState<any[]>([]);
   const AuthUser = useAuthUser();
+  const router = useRouter();
 
   const handleSendEvent = async () => {
     const token = await AuthUser.getIdToken();
@@ -44,8 +46,7 @@ const Home = () => {
       }
       form.push(tmp);
     }
-    console.log(JSON.stringify(form));
-    await fetch("/api/route/", {
+    const res = await fetch("/api/route/", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -53,7 +54,12 @@ const Home = () => {
         "Content-Type": "application/json",
       },
       body: await JSON.stringify(form),
-    }).then((res) => console.log(res));
+    }).then((res) => res.status);
+    console.log(JSON.stringify(form));
+    console.log(res);
+    if (res == 200) {
+      router.push("/console");
+    }
   };
 
   return (

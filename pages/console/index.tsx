@@ -22,8 +22,14 @@ interface ConsoleHomeProps {
     shuttle_direction: number;
     departure_time: {
       day_time: {
-        day_of_week: string;
-        time: string;
+        M: {
+          day_of_week: {
+            S: string;
+          };
+          time: {
+            S: string;
+          };
+        };
       };
     };
   }[];
@@ -48,9 +54,6 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
 
   const getRoute = async (route_id: string, shuttle_direction: number) => {
     const token = await AuthUser.getIdToken();
-    console.log("----------------route-----------------");
-    console.log(token);
-    console.log("----------------route-----------------");
 
     const {
       path,
@@ -92,6 +95,8 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
               direction={item.shuttle_direction}
               onClickFunction={getRoute}
               key={idx}
+              schedule={item.departure_time}
+              index={idx + 1}
             />
           ))}
           <PlusButton className="shadow-md mt-5">
@@ -113,7 +118,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
           path={path}
           zoom={13}
         />
-        <div className="absolute bottom-[50px] left-1/2 w-[400px] h-[80px] bg-white ml-[-200px] mt-[-40px] rounded-lg shadow-lg" />
+        {/* <div className="absolute bottom-[50px] left-1/2 w-[400px] h-[80px] bg-white ml-[-200px] mt-[-40px] rounded-lg shadow-lg" /> */}
       </div>
     </GridContainer>
   );
@@ -123,9 +128,6 @@ export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ AuthUser }) => {
   const token = await AuthUser.getIdToken();
-  console.log("----------------ssr-----------------");
-  console.log(token);
-  console.log("----------------ssr-----------------");
   const { schedule_count, schedule_data }: ConsoleHomeProps = await fetch(
     "http://api.dev.busition.com:8001/latest/schedule/console/",
     {
