@@ -7,17 +7,17 @@ import {
   InfoWindowF,
 } from "@react-google-maps/api";
 import styled from "styled-components";
-import { station_data } from "../types/station.dto";
+import { StationDataType } from "../types/station.dto";
 
 interface GoogleMapViewerProps {
   center: { lat: number; lng: number };
-  markers: station_data[];
+  markers: StationDataType[];
   path: number[][];
   zoom?: number;
 }
 
 interface RouteRenderProps {
-  markers: station_data[];
+  markers: StationDataType[];
   path: number[][];
 }
 

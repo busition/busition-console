@@ -1,9 +1,17 @@
-export interface station_data {
-  station_id: number;
-  station_name: string;
-  stopping_order: number;
+export interface StationDataType {
+  boarding_schedule: {
+    day_time: {
+      day_of_week: {
+        S: string;
+      };
+      time: { S: string };
+    };
+  };
+  passenger_count: number;
   station_latitude: number;
   station_longitude: number;
-  passenger_count: number;
+  station_name: string;
+  station_uuid: string;
+  stopping_order: number;
   travel_distance: string;
 }
