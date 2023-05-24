@@ -61,7 +61,9 @@ export default function ScheduleBox({
       };
     };
   }) => {
-    let str = korDayList[engDayList.indexOf(schedule.day_time.M.day_of_week.S)];
+    let str =
+      "일정: " +
+      korDayList[engDayList.indexOf(schedule.day_time.M.day_of_week.S)];
     var date = new Date(`2023-05-22${schedule.day_time.M.time.S}`);
 
     // 시각 추출
@@ -87,11 +89,10 @@ export default function ScheduleBox({
       <div className="flex flex-col w-full h-full px-5 py-5 justify-around">
         <h1 className="font-semibold text-xl">{index}번 노선</h1>
         <div>
-          <h2>출발: {startStation}</h2>
-          <h2>종착: {destStation}</h2>
+          <h2>출발: {direction ? destStation : startStation}</h2>
+          <h2>종착: {direction ? startStation : destStation}</h2>
         </div>
         <h3 className="text-sm">
-          일정: &nbsp;
           {schedule.day_time.M && setTime2String(schedule)}
         </h3>
       </div>

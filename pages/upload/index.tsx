@@ -24,11 +24,12 @@ const Home = () => {
 
   const handleSendEvent = async () => {
     const token = await AuthUser.getIdToken();
-    console.log(token);
     let form: sendForm[] = [];
+    console.log(values);
     for (let i = 0; i < values.length; i++) {
       let tmp: any = {};
       for (let j = 0; j < tableRows.length; j++) {
+        console.log(values[i][j]);
         if (
           tableRows[j] == "boarding_schedule" ||
           tableRows[j] == "passengers_uid" ||
