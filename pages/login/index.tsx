@@ -85,7 +85,7 @@ const LoginPage = () => {
             <p className="mt-10 text-center text-sm text-gray-500">
               Not a member?{" "}
               <a className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer">
-                Start a 14 day free trial
+                Start a free trial
               </a>
             </p>
           </Link>
