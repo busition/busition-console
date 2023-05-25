@@ -113,15 +113,15 @@ const Home: NextPage = () => {
                 <div className="pt-[25px] px-[25px] pb-[35px]">
                   <div>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      준비중..
+                      실시간 버스 위치
+                    </p>
+                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                      스케줄 관리
+                    </p>
+                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                      버스 노선 표시 (월 1회 변경)
                     </p>
                     {/* <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Landline Phone Numbers
-                    </p>
-                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Corporate email addresses
-                    </p>
-                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
                       Propsetcs
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
@@ -176,18 +176,18 @@ const Home: NextPage = () => {
                 <div className="pt-[25px] px-[25px] pb-[35px]">
                   <div>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      준비중..
+                      Free Plan의 모든 기능
+                    </p>
+                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                      버스 노선 표시 (월 5회 변경)
+                    </p>
+                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                      실시간 버스 속도 표시
+                    </p>
+                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                      도착 예정시간 표시
                     </p>
                     {/* <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Landline Phone Numbers
-                    </p>
-                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Corporate email addresses
-                    </p>
-                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Propsetcs
-                    </p>
-                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
                       Chrome Extension
                     </p> */}
                   </div>
@@ -235,20 +235,26 @@ const Home: NextPage = () => {
                 <div className="pt-[25px] px-[25px] pb-[35px]">
                   <div>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      준비중..
-                    </p>
-                    {/* <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Landline Phone Numbers
+                      Fast Plan의 모든 기능
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Corporate email addresses
+                      실시간 버스 노선
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Propsetcs
+                      교통정보 반영
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Chrome Extension
-                    </p> */}
+                      최적화 노선 생성
+                    </p>
+                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                      실시간 도착 예정 시간
+                    </p>
+                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                      실시간 잔여 거리
+                    </p>
+                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                      탑승자 안심번호
+                    </p> 
                   </div>
 
                   <div className="mt-[25px]">
