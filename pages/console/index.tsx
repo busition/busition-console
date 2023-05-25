@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GoogleMapViewer from "../../components/GoogleMapViewer";
-import { GetServerSideProps } from "next";
+// import { socket } from "../../utils/socket";
 import { StationDataType } from "../../types/station.dto";
 import ScheduleBox from "../../components/ScheduleBox";
 import styled from "styled-components";
+import { io, Socket } from "socket.io-client";
 import {
   AuthAction,
   useAuthUser,
@@ -14,6 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface ConsoleHomeProps {
+  socket: Socket;
   schedule_count: number;
   schedule_data: {
     route_uuid: string;
@@ -43,6 +45,17 @@ interface RouteType {
   station_data: StationDataType[];
 }
 
+interface SocketData {
+  location: number[];
+  delayed: number;
+  speed: number;
+}
+
+let socket = io("http://api.dev.busition.com:3000/user", {
+  transports: ["websocket"],
+  autoConnect: false,
+}).connect();
+
 const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   const [center, setCenter] = useState<{ lat: number; lng: number }>({
     lat: 37.5665,
@@ -51,10 +64,10 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   const [path, setPath] = useState<number[][]>([]);
   const [statioinData, setStatioinData] = useState<StationDataType[]>([]);
   const AuthUser = useAuthUser();
+  const [socketData, setSocketData] = useState<SocketData>();
 
   const getRoute = async (route_id: string, shuttle_direction: number) => {
     const token = await AuthUser.getIdToken();
-
     const {
       path,
       path_count,
@@ -68,6 +81,17 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
         accept: "application/json",
       },
     }).then((res) => res.json());
+    console.log(socket.connected);
+    console.log(route_id);
+    socket.emit("join_room", `${route_id}?${shuttle_direction}`);
+    socket.on("code", (data) => {
+      if (data == 200) {
+        socket.on("data", (data: SocketData) => {
+          console.log(data);
+          setSocketData(data);
+        });
+      }
+    });
     setPath(path);
     setStatioinData(station_data);
     let lat = 0;
@@ -79,6 +103,15 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
     setCenter({ lat: lat / path_count, lng: lng / path_count });
     console.log(path);
   };
+
+  useEffect(() => {
+    socket.connect();
+    return () => {
+      if (socket !== null && socket.connected) {
+        socket.disconnect();
+      }
+    };
+  }, []);
 
   return (
     <GridContainer>
@@ -117,6 +150,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
           markers={statioinData}
           path={path}
           zoom={13}
+          nowBusPos={socketData && socketData}
         />
         {/* <div className="absolute bottom-[50px] left-1/2 w-[400px] h-[80px] bg-white ml-[-200px] mt-[-40px] rounded-lg shadow-lg" /> */}
       </div>
@@ -135,6 +169,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
       headers: { Authorization: `Bearer ${token}` },
     }
   ).then((res) => res.json());
+
   return {
     props: { schedule_count, schedule_data },
   };

@@ -1,5 +1,3 @@
-import styled from "styled-components";
-
 interface ScheduleBoxProps {
   routeId: string;
   startStation: string;

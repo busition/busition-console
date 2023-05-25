@@ -19,6 +19,10 @@ const nextConfig = {
         source: "/api/route/",
         destination: "http://api.dev.busition.com:8001/latest/route/",
       },
+      {
+        source: "/api/socket",
+        destination: "http://localhost:8080/",
+      },
     ];
   },
 };
