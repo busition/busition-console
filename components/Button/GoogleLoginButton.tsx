@@ -1,13 +1,28 @@
 import firebase from "firebase";
+import { useAuthUser } from "next-firebase-auth";
 
 export default function GoogleLoginButton() {
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase
+    await firebase
       .auth()
       .signInWithPopup(provider)
-      .then((result) => {
-        result.user?.getIdToken().then((token) => {});
+      .then(async (result) => {
+        const token = await result.user?.getIdToken();
+        const res = await fetch("/api/signin", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/JSON",
+            accept: "application:JSON",
+          },
+          body: '{ "type": 1 }',
+        });
+        console.log(res);
+        if (res.status != 200) {
+          await firebase.auth().signOut();
+          throw new Error("server error");
+        }
       })
       .catch((error) => {
         // Handle errors
