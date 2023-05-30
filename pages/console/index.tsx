@@ -13,6 +13,8 @@ import {
 } from "next-firebase-auth";
 import Image from "next/image";
 import Link from "next/link";
+import firebase from "firebase";
+import { useRouter } from "next/router";
 
 interface ConsoleHomeProps {
   socket: Socket;
@@ -64,6 +66,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   const [path, setPath] = useState<number[][]>([]);
   const [statioinData, setStatioinData] = useState<StationDataType[]>([]);
   const AuthUser = useAuthUser();
+  const router = useRouter();
   const [socketData, setSocketData] = useState<SocketData>();
 
   const getRoute = async (route_id: string, shuttle_direction: number) => {
@@ -118,6 +121,21 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
       <div className=" h-screen bg-white shadow-xl overflow-auto">
         <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md">
           <h1 className="text-white text-center text-lg font-bold">SCHEDULE</h1>
+          <div className="absolute right-[8px] h-full flex justify-center">
+            <Image
+              className="cursor-pointer"
+              src={"/logout.svg"}
+              width={28}
+              height={28}
+              onClick={async () => {
+                console.log("click");
+                await firebase
+                  .auth()
+                  .signOut()
+                  .then(() => router.replace("/"));
+              }}
+            />
+          </div>
         </div>
         <div className="flex flex-col gap-[20px] px-[24px] py-[32px] justify-center items-center">
           {schedule_data.map((item, idx) => (

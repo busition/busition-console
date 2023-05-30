@@ -102,10 +102,10 @@ const Home: NextPage = () => {
 
                   <div>
                     <p className="text-[#717F87] text-[18px] leading-[28px] font-medium">
-                      5 Credits
+                      0 Credits
                     </p>
                     <p className="text-[#717F87] text-[18px] leading-[28px] font-medium">
-                      1 User
+                      1 Bus + 9 Mates
                     </p>
                   </div>
                 </div>
@@ -113,20 +113,20 @@ const Home: NextPage = () => {
                 <div className="pt-[25px] px-[25px] pb-[35px]">
                   <div>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Direct Phone Numbers
+                      실시간 버스 위치
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Landline Phone Numbers
+                      스케줄 관리
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Corporate email addresses
+                      버스 노선 표시 (월 1회 변경)
                     </p>
-                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                    {/* <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
                       Propsetcs
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
                       Chrome Extension
-                    </p>
+                    </p> */}
                   </div>
 
                   <div className="mt-[25px]">
@@ -159,16 +159,16 @@ const Home: NextPage = () => {
                       Fast Start
                     </p>
                     <p className="text-[#00153B] text-[50px] leading-[63px] font-bold">
-                      $49
+                      $59
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-[#717F87] text-[18px] leading-[28px] font-medium">
-                      50 Credits per month
+                    <p className="text-[#7 17F87] text-[18px] leading-[28px] font-medium">
+                      60 Credits per month
                     </p>
                     <p className="text-[#717F87] text-[18px] leading-[28px] font-medium">
-                      Unlimited users
+                      2 Bus + 12 Mates / Bus
                     </p>
                   </div>
                 </div>
@@ -176,20 +176,20 @@ const Home: NextPage = () => {
                 <div className="pt-[25px] px-[25px] pb-[35px]">
                   <div>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Direct Phone Numbers
+                      Free Plan의 모든 기능
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Landline Phone Numbers
+                      버스 노선 표시 (월 5회 변경)
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Corporate email addresses
+                      실시간 버스 속도 표시
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Propsetcs
+                      도착 예정시간 표시
                     </p>
-                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                    {/* <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
                       Chrome Extension
-                    </p>
+                    </p> */}
                   </div>
 
                   <div className="mt-[25px]">
@@ -218,16 +218,16 @@ const Home: NextPage = () => {
                       Accelerate
                     </p>
                     <p className="text-[#00153B] text-[50px] leading-[63px] font-bold">
-                      $89
+                      $290
                     </p>
                   </div>
 
                   <div>
                     <p className="text-[#717F87] text-[18px] leading-[28px] font-medium">
-                      100 Credits per month
+                      350 Credits per month
                     </p>
                     <p className="text-[#717F87] text-[18px] leading-[28px] font-medium">
-                      Unlimited users
+                      3 Bus + 30 Mates / Bus
                     </p>
                   </div>
                 </div>
@@ -235,20 +235,26 @@ const Home: NextPage = () => {
                 <div className="pt-[25px] px-[25px] pb-[35px]">
                   <div>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Direct Phone Numbers
+                      Fast Plan의 모든 기능
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Landline Phone Numbers
+                      실시간 버스 노선
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Corporate email addresses
+                      교통정보 반영
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Propsetcs
+                      최적화 노선 생성
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
-                      Chrome Extension
+                      실시간 도착 예정 시간
                     </p>
+                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                      실시간 잔여 거리
+                    </p>
+                    <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
+                      탑승자 안심번호
+                    </p> 
                   </div>
 
                   <div className="mt-[25px]">

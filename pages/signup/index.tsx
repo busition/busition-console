@@ -6,7 +6,6 @@ import {
   withAuthUserTokenSSR,
 } from "next-firebase-auth";
 import {} from "next-firebase-auth";
-import styled from "styled-components";
 import firebase from "firebase";
 import InputBox from "../../components/Input/InputBox";
 
@@ -30,6 +29,10 @@ const SignUp = () => {
 
   const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMsg({
+      type: "",
+      msg: "",
+    });
     if (!regex.test(phoneNumber)) {
       setErrorMsg({
         type: "전화번호 형식이 맞지 않습니다.",

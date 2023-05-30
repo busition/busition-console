@@ -7,11 +7,24 @@ import GoogleLoginButton from "../../components/Button/GoogleLoginButton";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState<{ type: string; msg: string }>({
+    type: "",
+    msg: "",
+  });
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMsg({
+      type: "",
+      msg: "",
+    });
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .catch((error) =>
+          setErrorMsg({ type: "Failed to login", msg: error.message })
+        );
     } catch (error: any) {
       console.log(error.message);
     }
@@ -71,13 +84,23 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <div>
+            <div className="flex flex-col gap-3">
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
+              {errorMsg.type && (
+                <div role="alert">
+                  <div className="bg-red-500 text-white font-bold rounded-t px-4 py-2">
+                    {errorMsg.type}
+                  </div>
+                  <div className="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
+                    <p>{errorMsg.msg}</p>
+                  </div>
+                </div>
+              )}
             </div>
           </form>
           <Link href="/signup">
