@@ -78,7 +78,6 @@ const LoginPage = () => {
               >
                 Sign in
               </button>
-              <GoogleLoginButton />
             </div>
           </form>
           <Link href="/signup">
