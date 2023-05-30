@@ -11,6 +11,7 @@ import firebase from "firebase";
 import InputBox from "../../components/Input/InputBox";
 
 const SignUp = () => {
+  const regex = /^010\d{4}\d{4}$/;
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -29,6 +30,13 @@ const SignUp = () => {
 
   const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!regex.test(phoneNumber)) {
+      setErrorMsg({
+        type: "전화번호 형식이 맞지 않습니다.",
+        msg: "전화번호는 '-'를 빼고 01012345678 처럼 작성해주시기 바랍니다.",
+      });
+      return;
+    }
     try {
       firebase
         .auth()
