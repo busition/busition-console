@@ -23,6 +23,14 @@ const nextConfig = {
         source: "/api/socket",
         destination: "http://localhost:8080/",
       },
+      {
+        source: "/api/:path*",
+        destination: "http://api.dev.busition.com:8001/latest/:path*",
+      },
+      // {
+      //   source: "/api/signin",
+      //   destination: "http://api.dev.busition.com:8001/latest/signin",
+      // },
     ];
   },
 };
