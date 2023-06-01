@@ -13,17 +13,17 @@ const Home: NextPage = () => {
   const handleAppRoute = (id: string, type: string) => {
     if (type == "android") {
       if (id == "driver") {
-        router.replace(
+        window.open(
           "https://play.google.com/store/apps/details?id=com.busition.driver"
         );
       } else if (id == "mate") {
-        router.replace(
+        window.open(
           "https://play.google.com/store/apps/details?id=com.busition.user"
         );
       }
     } else if (type == "apple") {
       if (id == "mate") {
-        router.replace(
+        window.open(
           "https://drive.google.com/file/d/1cFUXjQKzAKc3-E_1TapGMXaby0wiT_B7/view?usp=sharing"
         );
       }
@@ -356,7 +356,7 @@ const Home: NextPage = () => {
           Busition 파트너로 선정되시면 베타서비스를 무료로 사용하실 수 있습니다.
         </h3>
         <Link href={"https://forms.gle/DPj81VcvKwNcE2ZK8"}>
-          <a>
+          <a target="_blank">
             <div className="flex px-12 py-2 rounded-full shadow-lg mt-12 bg-[#fff] cursor-pointer">
               <h3 className="text-blue-500">신청하기</h3>
             </div>
