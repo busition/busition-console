@@ -24,18 +24,18 @@ interface ConsoleHomeProps {
     departure_point: string;
     destination: string;
     shuttle_direction: number;
-    departure_time: {
-      day_time: {
-        M: {
-          day_of_week: {
-            S: string;
-          };
-          time: {
-            S: string;
-          };
-        };
-      };
-    };
+    // departure_time: {
+    //   day_time: {
+    //     M: {
+    //       day_of_week: {
+    //         S: string;
+    //       };
+    //       time: {
+    //         S: string;
+    //       };
+    //     };
+    //   };
+    // };
   }[];
 }
 
@@ -83,14 +83,14 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
         Authorization: `Bearer ${token}`,
         accept: "application/json",
       },
-    }).then((res) => res.json());
-    console.log(socket.connected);
-    console.log(route_id);
+    }).then((res) => {
+      console.log(res);
+      return res.json();
+    });
     socket.emit("join_room", `${route_id}?${shuttle_direction}`);
     socket.on("code", (data) => {
       if (data == 200) {
         socket.on("data", (data: SocketData) => {
-          console.log(data);
           setSocketData(data);
         });
       }
@@ -104,7 +104,6 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
       lng += path[i][0];
     }
     setCenter({ lat: lat / path_count, lng: lng / path_count });
-    console.log(path);
   };
 
   useEffect(() => {
@@ -128,7 +127,6 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
               width={28}
               height={28}
               onClick={async () => {
-                console.log("click");
                 await firebase
                   .auth()
                   .signOut()
@@ -146,7 +144,6 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
               direction={item.shuttle_direction}
               onClickFunction={getRoute}
               key={idx}
-              schedule={item.departure_time}
               index={idx + 1}
             />
           ))}
@@ -187,7 +184,6 @@ export const getServerSideProps = withAuthUserTokenSSR({
       headers: { Authorization: `Bearer ${token}` },
     }
   ).then((res) => res.json());
-
   return {
     props: { schedule_count, schedule_data },
   };

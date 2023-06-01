@@ -5,7 +5,7 @@ export default function Header() {
   const modes: string[] = ["console", "driver", "mate", "price"];
 
   return (
-    <header className="bg-white h-[48px] w-screen sticky top-0 md:h-[64px]">
+    <header className="bg-white h-[48px] w-screen sticky top-0 md:h-[64px] z-50">
       <div className="flex flex-row items-center justify-between w-full h-full pl-[24px] pr-[8px] shadow-md py-[4px] md:py-[8px]">
         <Link href="/#home">
           <h1 className="font-bold text-2xl cursor-pointer">Busition</h1>
