@@ -199,9 +199,12 @@ const Home: NextPage = () => {
                   <div className="mt-[25px]">
                     <Link href={"/login"}>
                       <a>
-                        <button className="bg-[#006EF5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
+                      {/* <button className="bg-[#006EF5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
                           Downgrade +
-                        </button>
+                      </button> */}
+                    <button className="bg-[#E1E3E5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
+                      Current Plan
+                    </button>
                       </a>
                     </Link>
                   </div>
@@ -260,8 +263,11 @@ const Home: NextPage = () => {
                   </div>
 
                   <div className="mt-[25px]">
-                    <button className="bg-[#E1E3E5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
+                    {/* <button className="bg-[#E1E3E5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
                       Current Plan
+                    </button> */}
+                    <button className="bg-[#006EF5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
+                          Upgrade +
                     </button>
                   </div>
                 </div>
@@ -377,9 +383,13 @@ const Home: NextPage = () => {
             </div>
             <div className="text-center">
               <p className="text-xl text-gray-700 font-bold mb-2">우정헌</p>
+              <p className="text-base text-gray-600 font-normal">
+                xxxx1644
+              </p>
               <p className="text-base text-gray-400 font-normal">
                 Backend developer
               </p>
+        
             </div>
           </div>
           <div className="w-full bg-white rounded-lg p-12 flex flex-col justify-center items-center shadow-md">
@@ -392,6 +402,9 @@ const Home: NextPage = () => {
             </div>
             <div className="text-center">
               <p className="text-xl text-gray-700 font-bold mb-2">유경민</p>
+              <p className="text-base text-gray-600 font-normal">
+                xxxx1645
+              </p>
               <p className="text-base text-gray-400 font-normal">
                 Android developer
               </p>
@@ -407,6 +420,9 @@ const Home: NextPage = () => {
             </div>
             <div className="text-center">
               <p className="text-xl text-gray-700 font-bold mb-2">김준혁</p>
+              <p className="text-base text-gray-600 font-normal">
+                xxxx1596
+              </p>
               <p className="text-base text-gray-400 font-normal">
                 Application developer
               </p>
