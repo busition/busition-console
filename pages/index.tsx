@@ -46,7 +46,7 @@ const Home: NextPage = () => {
               <h3 className="text-lg sm:text-2xl">
                 스마트 버스를 사용하고 싶다면?
               </h3>
-              <h3 className="text-lg sm:text-2xl">지금 당장 Busition으로!</h3>
+              <h3 className="text-lg sm:text-2xl">지금 바로 Busition으로!</h3>
             </div>
             <Button text="Get started" primary={true} link="/console" />
           </div>
@@ -67,6 +67,8 @@ const Home: NextPage = () => {
               </h3>
               <h3 className="text-lg sm:text-2xl">버스 현황 관리</h3>
             </div>
+            <Button text="콘솔로 이동하기" primary={true} link="/console" />
+
           </div>
         </div>
       </section>
