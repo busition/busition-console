@@ -116,60 +116,64 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   }, []);
 
   return (
-    <GridContainer>
-      <div className=" h-screen bg-white shadow-xl overflow-auto">
-        <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md">
-          <h1 className="text-white text-center text-lg font-bold">SCHEDULE</h1>
-          <div className="absolute right-[8px] h-full flex justify-center">
-            <Image
-              className="cursor-pointer"
-              src={"/logout.svg"}
-              width={28}
-              height={28}
-              onClick={async () => {
-                await firebase
-                  .auth()
-                  .signOut()
-                  .then(() => router.replace("/"));
-              }}
-            />
+    <div className="relative">
+      <GridContainer>
+        <div className=" h-screen bg-white shadow-xl overflow-auto">
+          <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md">
+            <h1 className="text-white text-center text-lg font-bold">
+              SCHEDULE
+            </h1>
+            <div className="absolute right-[8px] h-full flex justify-center">
+              <Image
+                className="cursor-pointer"
+                src={"/logout.svg"}
+                width={28}
+                height={28}
+                onClick={async () => {
+                  await firebase
+                    .auth()
+                    .signOut()
+                    .then(() => router.replace("/"));
+                }}
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col gap-[20px] px-[24px] py-[32px] justify-center items-center">
-          {schedule_data.map((item, idx) => (
-            <ScheduleBox
-              routeId={item.route_uuid}
-              destStation={item.destination}
-              startStation={item.departure_point}
-              direction={item.shuttle_direction}
-              onClickFunction={getRoute}
-              key={idx}
-              index={idx + 1}
-            />
-          ))}
-          <PlusButton className="shadow-md mt-5">
-            <Link href="/upload">
+          <div className="flex flex-col gap-[20px] px-[24px] py-[32px] justify-center items-center">
+            {schedule_data.map((item, idx) => (
+              <ScheduleBox
+                routeId={item.route_uuid}
+                destStation={item.destination}
+                startStation={item.departure_point}
+                direction={item.shuttle_direction}
+                onClickFunction={getRoute}
+                key={idx}
+                index={idx + 1}
+              />
+            ))}
+            <Link href={"/update"}>
               <a>
-                <Image src={"/plus-white.svg"} width={100} height={100} />
+                <PlusButton className="shadow-md mt-5">
+                  <Image src={"/plus-white.svg"} width={100} height={100} />
+                </PlusButton>
               </a>
             </Link>
-          </PlusButton>
+          </div>
         </div>
-      </div>
-      <div className="relative">
-        <GoogleMapViewer
-          center={{
-            lat: center.lat,
-            lng: center.lng,
-          }}
-          markers={statioinData}
-          path={path}
-          zoom={13}
-          nowBusPos={socketData && socketData}
-        />
-        {/* <div className="absolute bottom-[50px] left-1/2 w-[400px] h-[80px] bg-white ml-[-200px] mt-[-40px] rounded-lg shadow-lg" /> */}
-      </div>
-    </GridContainer>
+        <div className="relative">
+          <GoogleMapViewer
+            center={{
+              lat: center.lat,
+              lng: center.lng,
+            }}
+            markers={statioinData}
+            path={path}
+            zoom={13}
+            nowBusPos={socketData && socketData}
+          />
+          {/* <div className="absolute bottom-[50px] left-1/2 w-[400px] h-[80px] bg-white ml-[-200px] mt-[-40px] rounded-lg shadow-lg" /> */}
+        </div>
+      </GridContainer>
+    </div>
   );
 };
 

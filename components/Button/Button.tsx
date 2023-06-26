@@ -4,12 +4,14 @@ interface buttonProps {
   text: string;
   primary?: boolean;
   link?: string;
+  onClick?: Function;
 }
 
 export default function Button({
   text,
   primary = false,
   link = "",
+  onClick = () => {},
 }: buttonProps) {
   return (
     <Link href={link}>
@@ -20,6 +22,9 @@ export default function Button({
           } rounded cursor-pointer border-[1px] ${
             primary ? "" : "border-gray-300"
           }`}
+          onClick={() => {
+            onClick();
+          }}
         >
           <h3 className={`${primary ? "text-white" : "text-blue-500"}`}>
             {text}
