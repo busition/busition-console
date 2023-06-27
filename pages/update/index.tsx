@@ -1,8 +1,12 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button/Button";
+import Modal from "../../components/Modal/Modal";
 
 export default function Update() {
   const dayList = ["일", "월", "화", "수", "목", "금", "토"];
+
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <body className="h-screen w-screen">
@@ -24,16 +28,16 @@ export default function Update() {
               </TableData>
               <TableData>
                 <div className="w-full h-full flex flex-row justify-center items-center">
-                  <SearchButton>
-                    <h3 className="font-[rgb(25, 118, 210)]">검색</h3>
+                  <SearchButton onClick={() => setOpen(true)}>
+                    <p className="font-[rgb(25, 118, 210)]">찾기</p>
                   </SearchButton>
                 </div>
               </TableData>
               <TableData>
                 <div className="w-full h-full flex flex-row items-center justify-center gap-2">
                   {dayList.map((item, idx) => (
-                    <DayButton key={idx}>
-                      <h3>{item}</h3>
+                    <DayButton key={idx} onClick={() => setOpen(open)}>
+                      <p>{item}</p>
                     </DayButton>
                   ))}
                 </div>
@@ -41,15 +45,31 @@ export default function Update() {
             </TableRow>
             <TableRow>
               <TableData colSpan={3} className="text-center">
-                <p className="font-bold">Add schedule</p>
+                <div className="w-full h-full flex flex-row justify-center items-center py-[4px]">
+                  <AddButton>
+                    <p>스케줄 추가</p>
+                  </AddButton>
+                </div>
               </TableData>
             </TableRow>
           </tbody>
         </Table>
       </div>
+      <Modal isOpen={open} handleCloseModal={() => setOpen(false)}>
+        <div></div>
+      </Modal>
     </body>
   );
 }
+
+const AddButton = styled.button`
+  padding: 3px 9px;
+  background-color: rgb(25, 118, 210);
+  color: white;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+`;
 
 const DayButton = styled.button`
   border: solid 1px rgba(25, 118, 210, 0.5);
