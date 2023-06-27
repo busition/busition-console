@@ -21,7 +21,7 @@ export default function Header() {
             ))}
           </div>
 
-          <Button text="Get started" primary={true} link="/console" />
+          <Button text="Get Started Free" primary={true} link="/console" />
         </div>
       </div>
     </header>
