@@ -16,9 +16,9 @@ export default function Dialog({
   return (
     <>
       {isOpen && (
-        <Container className="w-[50vw] h-[50vh] min-h-[250px] min-w-[350px] flex flex-col justify-center items-center bg-white shadow-lg rounded border-solid border-2">
+        <Container className="w-[50vw] h-[70vh] min-h-[250px] min-w-[350px] flex flex-col justify-center items-center bg-white shadow-lg rounded border-solid border-2">
           <div className="w-full h-full">{children}</div>
-          <div className="flex flex-row justify-end items-center w-full h-[74px] gap-4 pr-[12px] py-[12px]">
+          <div className="flex flex-row justify-end items-center w-full h-[50px] gap-4">
             <Button text="저장" primary={true} />
             <Button text="닫기" onClick={handleCloseModal} />
           </div>
@@ -33,4 +33,5 @@ const Container = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  padding: 12px 12px;
 `;
