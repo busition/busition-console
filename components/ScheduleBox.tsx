@@ -34,17 +34,21 @@ export default function ScheduleBox({
     "토요일",
   ];
   return (
-    <div
-      className="w-full h-[200px] bg-[#FFE6AA] rounded-xl shadow-md cursor-pointer"
-      onClick={() => onClickFunction(routeId, direction)}
-    >
-      <div className="flex flex-col w-full h-full px-5 py-5 justify-around">
+    <div className="w-full h-[200px] bg-[#FFE6AA] rounded-xl shadow-md cursor-pointer">
+      <div
+        className="flex flex-col w-full h-full px-5 py-5 justify-around"
+        onClick={() => onClickFunction(routeId, direction)}
+      >
         <h1 className="font-semibold text-xl">{index}번 노선</h1>
         <div>
           <h2>출발: {direction ? destStation : startStation}</h2>
           <h2>종착: {direction ? startStation : destStation}</h2>
         </div>
         <h3 className="text-sm">일정: 월요일 오전 9시</h3>
+      </div>
+      <div>
+        <hr className="border-solid border-1 border-black" />
+        <button>스케줄보기</button>
       </div>
     </div>
   );

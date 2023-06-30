@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Modal from "../../components/Modal/Modal";
+import Modal from "../../../components/Modal/Modal";
 import Geocode from "react-geocode";
 import {
   GoogleMap,
@@ -11,20 +11,20 @@ import {
 } from "@react-google-maps/api";
 import { withAuthUser } from "next-firebase-auth";
 
-const Update = () => {
+const Schedule = () => {
   const dayList = ["일", "월", "화", "수", "목", "금", "토"];
 
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <main className="h-screen w-screen">
+    <div className="h-screen w-screen">
       <div className="flex flex-col h-full w-full justify-center items-center px-20 py-20">
         <Table className="w-full rounded-md">
           <thead>
             <TableHeadRow>
               <TableHead>정류장 이름</TableHead>
               <TableHead>위치</TableHead>
-              <TableHead>스케쥴</TableHead>
+              <TableHead>스케줄</TableHead>
             </TableHeadRow>
           </thead>
           <tbody>
@@ -69,7 +69,7 @@ const Update = () => {
       <Modal isOpen={open} handleCloseModal={() => setOpen(false)}>
         <GeocodeContainer />
       </Modal>
-    </main>
+    </div>
   );
 };
 
@@ -191,4 +191,4 @@ const TableData = styled.td`
   padding: 8px 0;
 `;
 
-export default withAuthUser()(Update);
+export default withAuthUser()(Schedule);

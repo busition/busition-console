@@ -150,7 +150,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
                 index={idx + 1}
               />
             ))}
-            <Link href={"/update"}>
+            <Link href={"/route"}>
               <a>
                 <PlusButton className="shadow-md mt-5">
                   <Image src={"/plus-white.svg"} width={100} height={100} />
