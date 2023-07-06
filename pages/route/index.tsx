@@ -27,8 +27,8 @@ const Route = () => {
   ]);
 
   return (
-    <div className="h-screen w-screen">
-      <div className="flex flex-col h-full w-full justify-center items-center px-20 py-20">
+    <div className="h-screen w-screen flex flex-col justify-center items-center">
+      <div className="flex flex-col max-h-full w-full px-20 py-20 overflow-y-scroll">
         <Table className="w-full rounded-md">
           <thead>
             <TableHeadRow>

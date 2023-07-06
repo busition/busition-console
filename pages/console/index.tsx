@@ -58,6 +58,45 @@ let socket = io("http://api.dev.busition.com:3000/user", {
   autoConnect: false,
 }).connect();
 
+const Slider = ({
+  open,
+  selectedRoute,
+  handleOpen,
+}: {
+  open: boolean;
+  selectedRoute: string;
+  handleOpen: (state: boolean) => void;
+}) => {
+  const [pos, setPos] = useState(0);
+  const dayList = ["월", "화", "수", "목", "금", "토", "일"];
+  return (
+    <div
+      className={`w-[300px] h-screen absolute top-0 ${
+        open ? "left-[330px]" : "left-[0]"
+      } shadow-md bg-white transition-all z-10 ease-out`}
+    >
+      <div className="sticky w-full top-0 h-[56px]">
+        <div className="flex flex-row w-full h-full justify-center items-center bg-[#FFE6AA]">
+          <h1 className="text-black text-center text-lg font-bold">
+            {selectedRoute}
+          </h1>
+          <button
+            className="flex absolute right-4"
+            onClick={() => handleOpen(false)}
+          >
+            <Image src={"/back.svg"} width={24} height={24} />
+          </button>
+        </div>
+      </div>
+      <div className="sticky w-full top-[56px] h-[56px] flex flex-row justify-around items-center">
+        {dayList.map((item) => (
+          <DayButton clicked={false}>{item}</DayButton>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   const [center, setCenter] = useState<{ lat: number; lng: number }>({
     lat: 37.5665,
@@ -68,6 +107,8 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   const AuthUser = useAuthUser();
   const router = useRouter();
   const [socketData, setSocketData] = useState<SocketData>();
+  const [openSlider, setOpenSlider] = useState(false);
+  const [selectedRoute, setSelectedRoute] = useState("");
 
   const getRoute = async (route_id: string, shuttle_direction: number) => {
     const token = await AuthUser.getIdToken();
@@ -116,14 +157,14 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   }, []);
 
   return (
-    <div className="relative">
-      <GridContainer>
-        <div className=" h-screen bg-white shadow-xl overflow-auto">
-          <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md">
+    <div className="relative z-50">
+      <GridContainer className="z-50">
+        <div className=" h-screen bg-white shadow-xl overflow-auto z-50">
+          <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md z-10">
             <h1 className="text-white text-center text-lg font-bold">
               SCHEDULE
             </h1>
-            <div className="absolute right-[8px] h-full flex justify-center">
+            <div className="absolute right-[8px] h-full flex justify-center z-50">
               <Image
                 className="cursor-pointer"
                 src={"/logout.svg"}
@@ -138,7 +179,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
               />
             </div>
           </div>
-          <div className="flex flex-col gap-[20px] px-[24px] py-[32px] justify-center items-center">
+          <div className="flex flex-col gap-[20px] px-[24px] py-[32px] justify-center items-center z-50">
             {schedule_data.map((item, idx) => (
               <ScheduleBox
                 routeId={item.route_uuid}
@@ -148,6 +189,8 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
                 onClickFunction={getRoute}
                 key={idx}
                 index={idx + 1}
+                sliderHandler={setOpenSlider}
+                handleSelected={setSelectedRoute}
               />
             ))}
             <Link href={"/route"}>
@@ -159,7 +202,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
             </Link>
           </div>
         </div>
-        <div className="relative">
+        <div className="relative z-0">
           <GoogleMapViewer
             center={{
               lat: center.lat,
@@ -172,6 +215,11 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
           />
           {/* <div className="absolute bottom-[50px] left-1/2 w-[400px] h-[80px] bg-white ml-[-200px] mt-[-40px] rounded-lg shadow-lg" /> */}
         </div>
+        <Slider
+          open={openSlider}
+          selectedRoute={selectedRoute}
+          handleOpen={setOpenSlider}
+        />
       </GridContainer>
     </div>
   );
@@ -200,6 +248,7 @@ const GridContainer = styled.div`
   grid-template-columns: 330px 1fr;
   width: 100%;
   height: 100%;
+  position: relative;
 `;
 
 const PlusButton = styled.div`
@@ -208,4 +257,18 @@ const PlusButton = styled.div`
   height: 100px;
   cursor: pointer;
   background-color: #ffe6aa;
+`;
+
+const BasicButton = styled.button`
+  border: solid 1px rgba(25, 118, 210, 0.5);
+  padding: 3px 9px;
+  color: rgb(25, 118, 210);
+  border-radius: 4px;
+`;
+
+const DayButton = styled.button<{ clicked: boolean }>`
+  border-bottom: solid 1px ${(props) => (props.clicked ? "black" : "#d8d8df")};
+  color: ${(props) => (props.clicked ? "black" : "#d8d8df")};
+  padding: 3px 9px;
+  height: 56px;
 `;
