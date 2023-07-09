@@ -84,8 +84,13 @@ const Schedule = ({ scheduleList }: ScheduleProps) => {
                   </div>
                 </TableData>
                 <TableData>
-                  <div className="w-full h-full flex flex-row justify-center items-center">
-                    <p></p>
+                  <div className="w-full h-full flex flex-row justify-center items-center gap-2">
+                    <p>
+                      {scheduleState.scheduleList[idx].t &&
+                        scheduleState.scheduleList[idx].m &&
+                        scheduleState.scheduleList[idx].state &&
+                        `${scheduleState.scheduleList[idx].t}:${scheduleState.scheduleList[idx].m} ${scheduleState.scheduleList[idx].state}`}
+                    </p>
                     <BasicButton
                       onClick={() => {
                         setOpen(true);

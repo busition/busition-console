@@ -11,9 +11,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/route/:route/:direction",
-        destination:
-          "http://api.dev.busition.com:8001/latest/route/:route?shuttle_direction=:direction",
+        source: "/api/route/:route",
+        destination: "https://api.dev2.busition.com/latest/route/:route",
       },
       {
         source: "/api/route/",

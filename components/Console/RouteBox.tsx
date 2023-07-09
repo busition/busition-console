@@ -1,6 +1,8 @@
 import Image from "next/image";
+import { useState } from "react";
+import SmallMenuModal from "../Modal/SmallMenuModal";
 
-interface ScheduleBoxProps {
+interface RouteBoxProps {
   routeId: string;
   startStation: string;
   destStation: string;
@@ -11,7 +13,7 @@ interface ScheduleBoxProps {
   handleSelected: (name: string) => void;
 }
 
-export default function ScheduleBox({
+export default function RouteBox({
   routeId,
   startStation,
   destStation,
@@ -20,29 +22,27 @@ export default function ScheduleBox({
   index,
   sliderHandler,
   handleSelected,
-}: ScheduleBoxProps) {
-  const engDayList: string[] = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  const korDayList: string[] = [
-    "일요일",
-    "월요일",
-    "화요일",
-    "수요일",
-    "목요일",
-    "금요일",
-    "토요일",
-  ];
+}: RouteBoxProps) {
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
-    <div className="flex flex-col w-full h-[200px] rounded-xl shadow-md py-2">
-      <div className="flex flex-col w-full bg-[#FFE6AA] rounded-t-xl px-5 py-2">
+    <div className="flex flex-col w-full h-[200px] rounded-xl shadow-md">
+      <div className="relative flex flex-row w-full bg-[#FFE6AA] rounded-t-xl px-5 py-2 justify-center items-center">
         <h1 className="font-semibold text-xl">{index}번 노선</h1>
+        <button className="absolute flex right-4">
+          <Image
+            src={"/menu.svg"}
+            width={24}
+            height={24}
+            onClick={() => setModalOpen(!modalOpen)}
+          />
+          <SmallMenuModal isOpen={modalOpen}>
+            <div className="w-full flex flex-col">
+              <button className="font-semibold">편집하기</button>
+              <button className="font-semibold text-red-600">삭제하기</button>
+            </div>
+          </SmallMenuModal>
+        </button>
       </div>
       <div
         className="flex flex-col w-full h-full justify-around cursor-pointer px-5"
@@ -53,11 +53,11 @@ export default function ScheduleBox({
           <h2>종착: {direction ? startStation : destStation}</h2>
         </div>
       </div>
-      <div className="flex flex-col w-full h-[50px] justify-center items-center">
+      <div className="flex flex-col w-full h-[50px] justify-center items-center pb-2">
         <div className="flex">
           <Image
             className="cursor-pointer"
-            src={"/information.png"}
+            src={"/information.svg"}
             width={44}
             height={44}
             onClick={() => {

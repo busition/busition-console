@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import GoogleMapViewer from "../../components/GoogleMapViewer";
 // import { socket } from "../../utils/socket";
 import { StationDataType } from "../../types/station.dto";
-import ScheduleBox from "../../components/ScheduleBox";
+import RouteBox from "../../components/Console/RouteBox";
 import styled from "styled-components";
 import { io, Socket } from "socket.io-client";
 import {
@@ -15,6 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import firebase from "firebase";
 import { useRouter } from "next/router";
+import ScheduleBox from "../../components/Console/ScheduleBox";
 
 interface ConsoleHomeProps {
   socket: Socket;
@@ -24,18 +25,6 @@ interface ConsoleHomeProps {
     departure_point: string;
     destination: string;
     shuttle_direction: number;
-    // departure_time: {
-    //   day_time: {
-    //     M: {
-    //       day_of_week: {
-    //         S: string;
-    //       };
-    //       time: {
-    //         S: string;
-    //       };
-    //     };
-    //   };
-    // };
   }[];
 }
 
@@ -53,7 +42,7 @@ interface SocketData {
   speed: number;
 }
 
-let socket = io("http://api.dev.busition.com:3000/user", {
+let socket = io("https://socket.dev2.busition.com/test", {
   transports: ["websocket"],
   autoConnect: false,
 }).connect();
@@ -68,14 +57,17 @@ const Slider = ({
   handleOpen: (state: boolean) => void;
 }) => {
   const [pos, setPos] = useState(0);
+  const [selectedDay, setSelectedDay] = useState("");
+
   const dayList = ["월", "화", "수", "목", "금", "토", "일"];
+  const scheduleList = [];
   return (
     <div
       className={`w-[300px] h-screen absolute top-0 ${
         open ? "left-[330px]" : "left-[0]"
-      } shadow-md bg-white transition-all z-10 ease-out`}
+      } shadow-md bg-white transition-all z-10 ease-out overflow-auto`}
     >
-      <div className="sticky w-full top-0 h-[56px]">
+      <div className="sticky w-full top-0 h-[56px] shadow-md z-10">
         <div className="flex flex-row w-full h-full justify-center items-center bg-[#FFE6AA]">
           <h1 className="text-black text-center text-lg font-bold">
             {selectedRoute}
@@ -88,10 +80,22 @@ const Slider = ({
           </button>
         </div>
       </div>
-      <div className="sticky w-full top-[56px] h-[56px] flex flex-row justify-around items-center">
+      <div className="sticky w-full top-[56px] h-[56px] flex flex-row justify-around items-center bg-white z-10">
         {dayList.map((item) => (
-          <DayButton clicked={false}>{item}</DayButton>
+          <DayButton
+            clicked={selectedDay == item}
+            onClick={() => setSelectedDay(item)}
+          >
+            {item}
+          </DayButton>
         ))}
+      </div>
+      <div className="w-full flex flex-col py-[24px] px-[28px] gap-[20px] z-0">
+        <ScheduleBox />
+        <ScheduleBox />
+        <ScheduleBox />
+        <ScheduleBox />
+        <ScheduleBox />
       </div>
     </div>
   );
@@ -118,7 +122,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
       station_count,
       station_data,
       total_passenger_count,
-    }: RouteType = await fetch(`/api/route/${route_id}/${shuttle_direction}`, {
+    }: RouteType = await fetch(`/api/route/1`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -128,23 +132,27 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
       console.log(res);
       return res.json();
     });
-    socket.emit("join_room", `${route_id}?${shuttle_direction}`);
-    socket.on("code", (data) => {
-      if (data == 200) {
-        socket.on("data", (data: SocketData) => {
-          setSocketData(data);
-        });
+    socket.emit("test join", JSON.stringify({ bearer: token }));
+    socket.on(
+      "data",
+      (data: {
+        location: number[];
+        delayed: number;
+        speed: number;
+        stationName: string;
+      }) => {
+        console.log(data);
       }
-    });
-    setPath(path);
-    setStatioinData(station_data);
-    let lat = 0;
-    let lng = 0;
-    for (let i = 0; i < path.length; i++) {
-      lat += path[i][1];
-      lng += path[i][0];
-    }
-    setCenter({ lat: lat / path_count, lng: lng / path_count });
+    );
+    // setPath(path);
+    // setStatioinData(station_data);
+    // let lat = 0;
+    // let lng = 0;
+    // for (let i = 0; i < path.length; i++) {
+    //   lat += path[i][1];
+    //   lng += path[i][0];
+    // }
+    // setCenter({ lat: lat / path_count, lng: lng / path_count });
   };
 
   useEffect(() => {
@@ -157,14 +165,14 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   }, []);
 
   return (
-    <div className="relative z-50">
-      <GridContainer className="z-50">
+    <div className="relative">
+      <GridContainer className="">
         <div className=" h-screen bg-white shadow-xl overflow-auto z-50">
-          <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md z-10">
+          <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md">
             <h1 className="text-white text-center text-lg font-bold">
               SCHEDULE
             </h1>
-            <div className="absolute right-[8px] h-full flex justify-center z-50">
+            <div className="absolute right-[8px] h-full flex justify-center">
               <Image
                 className="cursor-pointer"
                 src={"/logout.svg"}
@@ -179,9 +187,9 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
               />
             </div>
           </div>
-          <div className="flex flex-col gap-[20px] px-[24px] py-[32px] justify-center items-center z-50">
+          <div className="flex flex-col gap-[20px] px-[24px] py-[32px] justify-center items-center">
             {schedule_data.map((item, idx) => (
-              <ScheduleBox
+              <RouteBox
                 routeId={item.route_uuid}
                 destStation={item.destination}
                 startStation={item.departure_point}
@@ -230,7 +238,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 })(async ({ AuthUser }) => {
   const token = await AuthUser.getIdToken();
   const { schedule_count, schedule_data }: ConsoleHomeProps = await fetch(
-    "http://api.dev.busition.com:8001/latest/schedule/console/",
+    "https://api.dev2.busition.com/latest/schedule/console/",
     {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
