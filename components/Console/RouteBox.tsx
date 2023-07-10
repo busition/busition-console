@@ -27,7 +27,7 @@ export default function RouteBox({
 
   return (
     <div className="flex flex-col w-full h-[200px] rounded-xl shadow-md">
-      <div className="relative flex flex-row w-full bg-[#FFE6AA] rounded-t-xl px-5 py-2 justify-center items-center">
+      <div className=" flex flex-row w-full bg-[#FFE6AA] rounded-t-xl px-5 py-2 justify-center items-center">
         <h1 className="font-semibold text-xl">{index}번 노선</h1>
         <button className="absolute flex right-4">
           <Image
@@ -53,7 +53,11 @@ export default function RouteBox({
           <h2>종착: {direction ? startStation : destStation}</h2>
         </div>
       </div>
-      <div className="flex flex-col w-full h-[50px] justify-center items-center pb-2">
+
+      <div
+        className="flex flex-col w-full h-[50px] justify-center items-center pb-2"
+        style={{ zIndex: -1 }}
+      >
         <div className="flex">
           <Image
             className="cursor-pointer"

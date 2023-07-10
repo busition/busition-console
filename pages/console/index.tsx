@@ -112,9 +112,11 @@ const Slider = ({
         <ScheduleBox />
       </div>
 
-      <PlusButton className="shadow-md mt-5">
-        <Image src={"/plus-white.svg"} width={100} height={100} />
-      </PlusButton>
+      <center>
+        <PlusButton className="shadow-md mt-5">
+          <Image src={"/plus-white.svg"} width={100} height={100} />
+        </PlusButton>
+      </center>
     </div>
   );
 };
