@@ -6,7 +6,6 @@ import {
   GoogleMap,
   LoadScriptNext,
   MarkerF,
-  PolylineF,
   InfoWindowF,
 } from "@react-google-maps/api";
 import { withAuthUser } from "next-firebase-auth";
@@ -23,12 +22,55 @@ let idx = 0;
 const Route = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [state, setState] = useState<TableItem[]>([
-    { id: idx, stationName: "", latlng: [37.55, 127] },
+    { id: idx, stationName: "", latlng: [] },
   ]);
+  const [selectedStation, setSelectedStation] = useState(-1);
+  const [pos, setPos] = useState<{
+    lat: number | undefined;
+    lng: number | undefined;
+  }>({ lat: undefined, lng: undefined });
+  const [activeMarker, setActiveMarker] = useState(-1);
 
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
-      <div className="flex flex-col max-h-full w-full px-20 py-20 overflow-y-scroll">
+      <div className="w-full h-1/2">
+        <LoadScriptNext
+          googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+        >
+          <GoogleMap
+            mapContainerStyle={{ height: "100%", width: "100%" }}
+            center={{
+              lat: 37.55,
+              lng: 127,
+            }}
+            zoom={12}
+          >
+            {state
+              .filter((it) => it.latlng.length !== 0)
+              .map((it) => (
+                <MarkerF
+                  position={{ lat: it.latlng[0], lng: it.latlng[1] }}
+                  onClick={() => setActiveMarker(it.id)}
+                >
+                  {it.id == activeMarker && (
+                    <InfoWindowF
+                      position={{ lat: it.latlng[0], lng: it.latlng[1] }}
+                      onCloseClick={() => setActiveMarker(-1)}
+                    >
+                      <div className="">
+                        <p>{it.stationName}</p>
+                      </div>
+                    </InfoWindowF>
+                  )}
+                </MarkerF>
+              ))}
+          </GoogleMap>
+        </LoadScriptNext>
+      </div>
+      <div
+        className="flex flex-col h-1/2
+       w-full px-20 py-20 overflow-y-scroll"
+      >
         <Table className="w-full rounded-md">
           <thead>
             <TableHeadRow>
@@ -61,7 +103,13 @@ const Route = () => {
                 </TableData>
                 <TableData>
                   <div className="w-full h-full flex flex-row justify-center items-center">
-                    <BasicButton onClick={() => setOpen(true)}>
+                    <BasicButton
+                      onClick={() => {
+                        setOpen(true);
+                        setPos({ lat: undefined, lng: undefined });
+                        setSelectedStation(item.id);
+                      }}
+                    >
                       <p className="font-[rgb(25, 118, 210)]">찾기</p>
                     </BasicButton>
                   </div>
@@ -107,14 +155,36 @@ const Route = () => {
           </tbody>
         </Table>
       </div>
-      <Modal isOpen={open} handleCloseModal={() => setOpen(false)}>
-        <GeocodeContainer />
+      <Modal
+        isOpen={open}
+        handleCloseModal={() => setOpen(false)}
+        handleSubmit={() => {
+          state.forEach((it) => {
+            if (it.id == selectedStation && pos.lat && pos.lng) {
+              it.latlng = [pos.lat, pos.lng];
+            }
+          });
+          console.log(state);
+          setState([...state]);
+          setOpen(false);
+        }}
+      >
+        <GeocodeContainer handlePos={setPos} />
       </Modal>
     </div>
   );
 };
 
-const GeocodeContainer = () => {
+const GeocodeContainer = ({
+  handlePos,
+}: {
+  handlePos: React.Dispatch<
+    React.SetStateAction<{
+      lat: number | undefined;
+      lng: number | undefined;
+    }>
+  >;
+}) => {
   Geocode.setApiKey(process.env.NEXT_PUBLIC_GOOGLE_GEOCODING);
   Geocode.setLanguage("kr");
   Geocode.setRegion("kr");
@@ -186,6 +256,10 @@ const GeocodeContainer = () => {
                 lng: e.latLng?.lng() as number,
               });
               setCenter({
+                lat: e.latLng?.lat() as number,
+                lng: e.latLng?.lng() as number,
+              });
+              handlePos({
                 lat: e.latLng?.lat() as number,
                 lng: e.latLng?.lng() as number,
               });

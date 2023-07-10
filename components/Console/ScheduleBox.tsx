@@ -51,9 +51,11 @@ const ScheduleBox = () => {
       <div className="w-full flex flex-col">
         {scheduleList.map((schedule) => (
           <div className="w-full flex flex-row justify-between items-center py-4">
-            <p>{schedule.stationName}</p>
+            <p className="font-semibold text-lg w-[100px]">
+              {schedule.stationName}
+            </p>
             <VerticalLine />
-            <p>{schedule.time}</p>
+            <p className="text-lg">{schedule.time}</p>
           </div>
         ))}
       </div>
@@ -64,7 +66,7 @@ const ScheduleBox = () => {
 const VerticalLine = styled.div`
   border: 0.5px solid black;
   width: 1px;
-  height: 50px;
+  height: 10px;
 `;
 
 export default ScheduleBox;
