@@ -60,6 +60,7 @@ const Slider = ({
   const [selectedDay, setSelectedDay] = useState("");
 
   const dayList = ["월", "화", "수", "목", "금", "토", "일"];
+  const setDayList = ["월", "수", "금"];
   const scheduleList = [];
   return (
     <div
@@ -80,11 +81,27 @@ const Slider = ({
           </button>
         </div>
       </div>
+
       <div className="sticky w-full top-[56px] h-[56px] flex flex-row justify-around items-center bg-white z-10">
-        {dayList.map((item) => (
+        <div>
+          <h1 className="text-black text-center text-lg font-bold">
+            운행 요일:
+          </h1>
+        </div>
+        {
+          /* {dayList.map((item) => (
           <DayButton
             clicked={selectedDay == item}
             onClick={() => setSelectedDay(item)}
+          >
+            {item}
+          </DayButton>
+        ))} */
+        }
+
+        {setDayList.map((item) => (
+          <DayButton
+            clicked={true}
           >
             {item}
           </DayButton>
@@ -93,10 +110,11 @@ const Slider = ({
       <div className="w-full flex flex-col py-[24px] px-[28px] gap-[20px] z-0">
         <ScheduleBox />
         <ScheduleBox />
-        <ScheduleBox />
-        <ScheduleBox />
-        <ScheduleBox />
       </div>
+
+      <PlusButton className="shadow-md mt-5">
+        <Image src={"/plus-white.svg"} width={100} height={100} />
+      </PlusButton>
     </div>
   );
 };
@@ -142,7 +160,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
         stationName: string;
       }) => {
         console.log(data);
-      }
+      },
     );
     // setPath(path);
     // setStatioinData(station_data);
@@ -242,7 +260,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
     {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
-    }
+    },
   ).then((res) => res.json());
   return {
     props: { schedule_count, schedule_data },
