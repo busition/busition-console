@@ -188,7 +188,10 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
     <div className="relative">
       <GridContainer className="">
         <div className=" h-screen bg-white shadow-xl overflow-auto z-50">
-          <div className="flex sticky top-0 items-center justify-center w-full bg-[#F7E1AE] h-[56px] shadow-md">
+          <div
+            className="flex sticky top-0 items-center justify-center w-full bg-[#F7E1AE] h-[56px] shadow-md"
+            style={{ zIndex: 1 }}
+          >
             <h1 className="text-black text-center text-lg font-bold">
               SCHEDULE
             </h1>

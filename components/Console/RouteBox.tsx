@@ -54,10 +54,7 @@ export default function RouteBox({
         </div>
       </div>
 
-      <div
-        className="flex flex-col w-full h-[50px] justify-center items-center pb-2"
-        style={{ zIndex: -1 }}
-      >
+      <div className="flex flex-col w-full h-[50px] justify-center items-center pb-2">
         <div className="flex">
           <Image
             className="cursor-pointer"
