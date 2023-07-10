@@ -71,7 +71,7 @@ const Slider = ({
       <div className="sticky w-full top-0 h-[56px] shadow-md z-10">
         <div className="flex flex-row w-full h-full justify-center items-center bg-[#E8D5C4]">
           <h1 className="text-black text-center text-lg font-bold">
-            {selectedRoute}
+            운행 스케줄 - {selectedRoute}
           </h1>
           <button
             className="flex absolute right-4"
@@ -196,7 +196,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
             style={{ zIndex: 1 }}
           >
             <h1 className="text-black text-center text-lg font-bold">
-              SCHEDULE
+              노선 목록 (n개)
             </h1>
             <div className="absolute right-[8px] h-full flex justify-center">
               <Image
