@@ -27,7 +27,7 @@ export default function RouteBox({
 
   return (
     <div className="flex flex-col w-full h-[200px] rounded-xl shadow-md">
-      <div className=" flex flex-row w-full bg-[#FFE6AA] rounded-t-xl px-5 py-2 justify-center items-center">
+      <div className="relative flex flex-row w-full bg-[#FFE6AA] rounded-t-xl px-5 py-2 justify-center items-center">
         <h1 className="font-semibold text-xl">{index}번 노선</h1>
         <button className="absolute flex right-4">
           <Image
