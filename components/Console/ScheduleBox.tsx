@@ -50,12 +50,14 @@ const ScheduleBox = () => {
       </div>
       <div className="w-full flex flex-col">
         {scheduleList.map((schedule) => (
-          <div className="w-full flex flex-row justify-between items-center py-4">
-            <p className="font-semibold text-lg w-[100px]">
+          <div className="w-full flex flex-row justify-between items-center py-4 px-5">
+            <h2>
               {schedule.stationName}
-            </p>
+            </h2>
             <VerticalLine />
-            <p className="text-lg">{schedule.time}</p>
+            <h2>
+              {schedule.time}
+            </h2>
           </div>
         ))}
       </div>
