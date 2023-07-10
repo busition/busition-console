@@ -69,7 +69,7 @@ const Slider = ({
       } shadow-md bg-white transition-all z-10 ease-out overflow-auto`}
     >
       <div className="sticky w-full top-0 h-[56px] shadow-md z-10">
-        <div className="flex flex-row w-full h-full justify-center items-center bg-[#FFE6AA]">
+        <div className="flex flex-row w-full h-full justify-center items-center bg-[#E8D5C4]">
           <h1 className="text-black text-center text-lg font-bold">
             {selectedRoute}
           </h1>
@@ -84,7 +84,7 @@ const Slider = ({
 
       <div className="sticky w-full top-[56px] h-[56px] flex flex-row justify-around items-center bg-white z-10">
         <div>
-          <h1 className="text-black text-center text-lg font-bold">
+          <h1 className="text-black text-center text-lg">
             운행 요일:
           </h1>
         </div>
@@ -186,8 +186,8 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
     <div className="relative">
       <GridContainer className="">
         <div className=" h-screen bg-white shadow-xl overflow-auto z-50">
-          <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md">
-            <h1 className="text-white text-center text-lg font-bold">
+          <div className="flex sticky top-0 items-center justify-center w-full bg-[#F7E1AE] h-[56px] shadow-md">
+            <h1 className="text-black text-center text-lg font-bold">
               SCHEDULE
             </h1>
             <div className="absolute right-[8px] h-full flex justify-center">
@@ -221,9 +221,15 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
             ))}
             <Link href={"/route"}>
               <a>
-                <PlusButton className="shadow-md mt-5">
+                {
+                  /* <PlusButton className="shadow-md mt-5">
                   <Image src={"/plus-white.svg"} width={100} height={100} />
-                </PlusButton>
+                </PlusButton> */
+                }
+
+                <BasicButton className="mt-5">
+                  + 노선 추가하기
+                </BasicButton>
               </a>
             </Link>
           </div>
@@ -282,7 +288,8 @@ const PlusButton = styled.div`
   width: 100px;
   height: 100px;
   cursor: pointer;
-  background-color: #ffe6aa;
+  // background-color: #ffe6aa;
+  background-color: #FFD9C0;
 `;
 
 const BasicButton = styled.button`

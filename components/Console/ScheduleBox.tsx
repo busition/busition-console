@@ -31,7 +31,7 @@ const ScheduleBox = () => {
   ];
   return (
     <div className="w-full flex flex-col rounded-xl shadow-md">
-      <div className="relative flex flex-row w-full bg-[#FFE6AA] rounded-t-xl px-5 py-2 justify-center items-center">
+      <div className="relative flex flex-row w-full bg-[#FFD9C0] rounded-t-xl px-5 py-2 justify-center items-center">
         <h1 className="font-semibold text-xl">1번 스케줄</h1>
         <button className="absolute flex right-4">
           <Image
