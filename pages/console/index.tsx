@@ -106,6 +106,9 @@ const Slider = ({
             {item}
           </DayButton>
         ))}
+        <div>
+          수정<br />버튼
+        </div>
       </div>
       <div className="w-full flex flex-col py-[24px] px-[28px] gap-[20px] z-0">
         <ScheduleBox />
