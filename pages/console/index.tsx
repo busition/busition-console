@@ -16,6 +16,8 @@ import Link from "next/link";
 import firebase from "firebase";
 import { useRouter } from "next/router";
 import ScheduleBox from "../../components/Console/ScheduleBox";
+import Button from "../../components/Button/Button";
+import FilledButton from "../../components/Button/FilledButton";
 
 interface ConsoleHomeProps {
   socket: Socket;
@@ -42,6 +44,19 @@ interface SocketData {
   speed: number;
 }
 
+interface ScheduleList {
+  stationName: string;
+  stationOrder: number;
+  time: string;
+}
+
+interface ScheduleData {
+  day: string[];
+  scheduleId: number;
+  editMode: "edit" | "create" | "";
+  schedule: ScheduleList[];
+}
+
 let socket = io("https://socket.dev2.busition.com/test", {
   transports: ["websocket"],
   autoConnect: false,
@@ -57,10 +72,45 @@ const Slider = ({
   handleOpen: (state: boolean) => void;
 }) => {
   const [pos, setPos] = useState(0);
-  const [selectedDay, setSelectedDay] = useState("");
+  const [selectedDay, setSelectedDay] = useState<string[]>([]);
+  const [isInputedData, setIsInputedData] = useState(false);
 
   const dayList = ["월", "화", "수", "목", "금", "토", "일"];
-  const scheduleList = [];
+  const [scheduleData, setScheduleData] = useState<ScheduleData[]>([
+    {
+      day: selectedDay,
+      scheduleId: 1,
+      editMode: "",
+      schedule: [
+        {
+          stationName: "국민대학교",
+          time: "01:00",
+          stationOrder: 0,
+        },
+        {
+          stationName: "청덕초등학교",
+          time: "02:00",
+          stationOrder: 1,
+        },
+        {
+          stationName: "고대부고",
+          time: "03:00",
+          stationOrder: 2,
+        },
+        {
+          stationName: "봉국사",
+          time: "04:00",
+          stationOrder: 3,
+        },
+      ],
+    },
+  ]);
+
+  const handleEditMode = (dataIdx: number, mode: "edit" | "create" | "") => {
+    scheduleData[dataIdx].editMode = mode;
+    setScheduleData([...scheduleData]);
+  };
+
   return (
     <div
       className={`w-[300px] h-screen absolute top-0 ${
@@ -83,20 +133,67 @@ const Slider = ({
       <div className="sticky w-full top-[56px] h-[56px] flex flex-row justify-around items-center bg-white z-10">
         {dayList.map((item) => (
           <DayButton
-            clicked={selectedDay == item}
-            onClick={() => setSelectedDay(item)}
+            className="cursor-default"
+            clicked={selectedDay.includes(item)}
           >
             {item}
           </DayButton>
         ))}
       </div>
-      <div className="w-full flex flex-col py-[24px] px-[28px] gap-[20px] z-0">
-        <ScheduleBox />
-        <ScheduleBox />
-        <ScheduleBox />
-        <ScheduleBox />
-        <ScheduleBox />
-      </div>
+      {isInputedData ? (
+        <div className="w-full flex flex-col py-[24px] px-[24px] gap-[20px] z-0 justify-start items-center">
+          {scheduleData.map((schedule, idx) => (
+            <ScheduleBox
+              scheduleList={schedule.schedule}
+              dataIdx={idx}
+              mode={schedule.editMode}
+              handleEditMode={handleEditMode}
+            />
+          ))}
+          <PlusButton className="shadow-md mt-5" onClick={() => {}}>
+            <Image src={"/plus-white.svg"} width={100} height={100} />
+          </PlusButton>
+        </div>
+      ) : (
+        <div className="w-full flex flex-col py-[24px] px-[16px] gap-[20px] z-0">
+          <div className="w-full h-full flex flex-col justify-center items-center">
+            <p className="text-center">현재 추가된 스케줄이 없습니다.</p>
+            <p className="text-center">
+              운행 날짜를 선택하시면 스케줄을 추가하실 수 있습니다.
+            </p>
+            <div className="w-full flex flex-row justify-around items-center mt-[16px]">
+              {dayList.map((day) => {
+                if (selectedDay.includes(day)) {
+                  return (
+                    <FilledButton
+                      text={day}
+                      size="s"
+                      handleOnclick={() =>
+                        setSelectedDay(selectedDay.filter((it) => it != day))
+                      }
+                    />
+                  );
+                } else {
+                  return (
+                    <BasicButton
+                      onClick={() => setSelectedDay([...selectedDay, day])}
+                    >
+                      {day}
+                    </BasicButton>
+                  );
+                }
+              })}
+            </div>
+            <div className="mt-[12px]">
+              <FilledButton
+                text="저장"
+                size="s"
+                handleOnclick={() => setIsInputedData(true)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -132,7 +229,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
       console.log(res);
       return res.json();
     });
-    socket.emit("test join", JSON.stringify({ bearer: token }));
+    socket.emit("test console", JSON.stringify({ bearer: token }));
     socket.on(
       "data",
       (data: {
@@ -141,7 +238,11 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
         speed: number;
         stationName: string;
       }) => {
-        console.log(data);
+        setSocketData({
+          speed: data.speed,
+          location: data.location,
+          delayed: data.delayed,
+        });
       }
     );
     // setPath(path);
@@ -269,7 +370,7 @@ const PlusButton = styled.div`
 
 const BasicButton = styled.button`
   border: solid 1px rgba(25, 118, 210, 0.5);
-  padding: 3px 9px;
+  padding: 4px 10px;
   color: rgb(25, 118, 210);
   border-radius: 4px;
 `;

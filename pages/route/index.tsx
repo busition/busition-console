@@ -33,7 +33,7 @@ const Route = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
-      <div className="w-full h-1/2">
+      <div className="w-full h-1/2 rounded shadow-md">
         <LoadScriptNext
           googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
         >
