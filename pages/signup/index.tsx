@@ -122,4 +122,4 @@ const SignUp = () => {
   );
 };
 
-export default withAuthUser({ whenAuthed: AuthAction.REDIRECT_TO_APP })(SignUp);
+export default SignUp;

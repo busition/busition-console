@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import SmallMenuModal from "../Modal/SmallMenuModal";
 
@@ -26,7 +27,7 @@ export default function RouteBox({
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <div className="flex flex-col w-full h-[200px] rounded-xl shadow-md">
+    <div className="flex flex-col w-full h-[200px] rounded-xl shadow-md z-0">
       <div className="relative flex flex-row w-full bg-[#FFE6AA] rounded-t-xl px-5 py-2 justify-center items-center">
         <h1 className="font-semibold text-xl">{index}번 노선</h1>
         <button className="absolute flex right-4">
@@ -38,7 +39,11 @@ export default function RouteBox({
           />
           <SmallMenuModal isOpen={modalOpen}>
             <div className="w-full flex flex-col">
-              <button className="font-semibold">편집하기</button>
+              <Link href={"/route"}>
+                <a>
+                  <button className="font-semibold">편집하기</button>
+                </a>
+              </Link>
               <button className="font-semibold text-red-600">삭제하기</button>
             </div>
           </SmallMenuModal>

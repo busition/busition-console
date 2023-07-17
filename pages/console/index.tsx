@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import GoogleMapViewer from "../../components/GoogleMapViewer";
+import GoogleMapViewer from "../../components/RouterRenderer";
 // import { socket } from "../../utils/socket";
 import { StationDataType } from "../../types/station.dto";
 import RouteBox from "../../components/Console/RouteBox";
@@ -18,6 +18,8 @@ import { useRouter } from "next/router";
 import ScheduleBox from "../../components/Console/ScheduleBox";
 import Button from "../../components/Button/Button";
 import FilledButton from "../../components/Button/FilledButton";
+import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import RouteRenderer from "../../components/RouterRenderer";
 
 interface ConsoleHomeProps {
   socket: Socket;
@@ -59,7 +61,7 @@ interface ScheduleData {
 
 let socket = io("https://socket.dev2.busition.com/test", {
   transports: ["websocket"],
-  autoConnect: false,
+  autoConnect: true,
 }).connect();
 
 const Slider = ({
@@ -210,6 +212,32 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   const [socketData, setSocketData] = useState<SocketData>();
   const [openSlider, setOpenSlider] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState("");
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({
+    lat: 37,
+    lng: 127,
+  });
+
+  const testRoute = async () => {
+    console.log("sent");
+    socket.emit("test console", "0");
+    socket.on(
+      "data",
+      (data: {
+        location: number[];
+        delayed: number;
+        speed: number;
+        stationName: string;
+      }) => {
+        setSocketData({
+          speed: data.speed,
+          location: data.location,
+          delayed: data.delayed,
+        });
+        console.log(data);
+        setCenter({ lat: data.location[0], lng: data.location[1] });
+      }
+    );
+  };
 
   const getRoute = async (route_id: string, shuttle_direction: number) => {
     const token = await AuthUser.getIdToken();
@@ -269,7 +297,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
     <div className="relative">
       <GridContainer className="">
         <div className=" h-screen bg-white shadow-xl overflow-auto z-50">
-          <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md">
+          <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md z-50">
             <h1 className="text-white text-center text-lg font-bold">
               SCHEDULE
             </h1>
@@ -302,6 +330,16 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
                 handleSelected={setSelectedRoute}
               />
             ))}
+            <RouteBox
+              routeId={"1"}
+              destStation={"test"}
+              startStation={"test"}
+              direction={1}
+              onClickFunction={testRoute}
+              index={-1}
+              sliderHandler={setOpenSlider}
+              handleSelected={setSelectedRoute}
+            />
             <Link href={"/route"}>
               <a>
                 <PlusButton className="shadow-md mt-5">
@@ -311,17 +349,22 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
             </Link>
           </div>
         </div>
-        <div className="relative z-0">
-          <GoogleMapViewer
-            center={{
-              lat: center.lat,
-              lng: center.lng,
-            }}
-            markers={statioinData}
-            path={path}
-            zoom={13}
-            nowBusPos={socketData && socketData}
-          />
+        <div className="relative z-0 w-full h-full">
+          <LoadScript
+            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+          >
+            <GoogleMap
+              center={center}
+              zoom={12}
+              mapContainerStyle={{ height: "100%", width: "100%" }}
+            >
+              <RouteRenderer
+                markers={statioinData}
+                path={[]}
+                nowBusPos={socketData}
+              />
+            </GoogleMap>
+          </LoadScript>
           {/* <div className="absolute bottom-[50px] left-1/2 w-[400px] h-[80px] bg-white ml-[-200px] mt-[-40px] rounded-lg shadow-lg" /> */}
         </div>
         <Slider
@@ -333,24 +376,6 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
     </div>
   );
 };
-
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})(async ({ AuthUser }) => {
-  const token = await AuthUser.getIdToken();
-  const { schedule_count, schedule_data }: ConsoleHomeProps = await fetch(
-    "https://api.dev2.busition.com/latest/schedule/console/",
-    {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  ).then((res) => res.json());
-  return {
-    props: { schedule_count, schedule_data },
-  };
-});
-
-export default withAuthUser<ConsoleHomeProps>()(ConsoleHome);
 
 const GridContainer = styled.div`
   display: grid;
@@ -381,3 +406,21 @@ const DayButton = styled.button<{ clicked: boolean }>`
   padding: 3px 9px;
   height: 56px;
 `;
+
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})(async ({ AuthUser }) => {
+  const token = await AuthUser.getIdToken();
+  const { schedule_count, schedule_data }: ConsoleHomeProps = await fetch(
+    "https://api.dev2.busition.com/latest/schedule/console/",
+    {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  ).then((res) => res.json());
+  return {
+    props: { schedule_count, schedule_data },
+  };
+});
+
+export default React.memo(ConsoleHome);
