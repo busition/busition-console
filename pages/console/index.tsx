@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from "react";
-import GoogleMapViewer from "../../components/RouterRenderer";
-// import { socket } from "../../utils/socket";
 import { StationDataType } from "../../types/station.dto";
 import RouteBox from "../../components/Console/RouteBox";
 import styled from "styled-components";
 import { io, Socket } from "socket.io-client";
-import {
-  AuthAction,
-  useAuthUser,
-  withAuthUser,
-  withAuthUserTokenSSR,
-} from "next-firebase-auth";
 import Image from "next/image";
 import Link from "next/link";
 import firebase from "firebase";
 import { useRouter } from "next/router";
 import ScheduleBox from "../../components/Console/ScheduleBox";
-import Button from "../../components/Button/Button";
 import FilledButton from "../../components/Button/FilledButton";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
 import RouteRenderer from "../../components/RouterRenderer";
+import { GetServerSideProps } from "next";
+import { deleteCookie, getCookie, hasCookie } from "cookies-next";
 
 interface ConsoleHomeProps {
   socket: Socket;
@@ -207,7 +200,6 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   });
   const [path, setPath] = useState<number[][]>([]);
   const [statioinData, setStatioinData] = useState<StationDataType[]>([]);
-  const AuthUser = useAuthUser();
   const router = useRouter();
   const [socketData, setSocketData] = useState<SocketData>();
   const [openSlider, setOpenSlider] = useState(false);
@@ -218,7 +210,6 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   });
 
   const testRoute = async () => {
-    console.log("sent");
     socket.emit("test console", "0");
     socket.on(
       "data",
@@ -233,14 +224,13 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
           location: data.location,
           delayed: data.delayed,
         });
-        console.log(data);
         setCenter({ lat: data.location[0], lng: data.location[1] });
       }
     );
   };
 
   const getRoute = async (route_id: string, shuttle_direction: number) => {
-    const token = await AuthUser.getIdToken();
+    const token = getCookie("token");
     const {
       path,
       path_count,
@@ -254,7 +244,6 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
         accept: "application/json",
       },
     }).then((res) => {
-      console.log(res);
       return res.json();
     });
     socket.emit("test console", JSON.stringify({ bearer: token }));
@@ -308,10 +297,8 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
                 width={28}
                 height={28}
                 onClick={async () => {
-                  await firebase
-                    .auth()
-                    .signOut()
-                    .then(() => router.replace("/"));
+                  deleteCookie("token");
+                  router.reload();
                 }}
               />
             </div>
@@ -407,20 +394,29 @@ const DayButton = styled.button<{ clicked: boolean }>`
   height: 56px;
 `;
 
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})(async ({ AuthUser }) => {
-  const token = await AuthUser.getIdToken();
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  if (!hasCookie("token", { req, res })) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  const token = getCookie("token", { req, res });
   const { schedule_count, schedule_data }: ConsoleHomeProps = await fetch(
     "https://api.dev2.busition.com/latest/schedule/console/",
     {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        accept: "application/json",
+      },
     }
-  ).then((res) => res.json());
+  ).then((response) => response.json());
   return {
     props: { schedule_count, schedule_data },
   };
-});
+};
 
 export default React.memo(ConsoleHome);

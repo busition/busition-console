@@ -36,7 +36,12 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head></Head>
+        <Head>
+          <script
+            type="text/javascript"
+            src="https://stgstdpay.inicis.com/stdjs/INIStdPay.js"
+          ></script>
+        </Head>
         <body>
           <Main />
           <NextScript />

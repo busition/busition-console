@@ -11,20 +11,20 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/route/:route",
-        destination: "https://api.dev2.busition.com/latest/route/:route",
-      },
-      {
-        source: "/api/route/",
-        destination: "http://api.dev.busition.com:8001/latest/route/",
-      },
-      {
         source: "/api/socket",
         destination: "https://socket2.dev.busition.com",
       },
       {
+        source: "/api/auth/:path*",
+        destination: "https://api.dev2.busition.com/latest/:path*",
+      },
+      {
         source: "/api/:path*",
-        destination: "http://api.dev.busition.com:8001/latest/:path*",
+        destination: "https://api.dev2.busition.com/latest/:path*",
+      },
+      {
+        source: "/api/newOrder",
+        destination: "http://localhost:5050/v1/inicis/new/order",
       },
     ];
   },
