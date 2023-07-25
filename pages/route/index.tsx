@@ -8,7 +8,6 @@ import {
   MarkerF,
   InfoWindowF,
 } from "@react-google-maps/api";
-import { withAuthUser } from "next-firebase-auth";
 import { ReactSortable } from "react-sortablejs";
 
 interface TableItem {
@@ -315,4 +314,4 @@ const TableData = styled.td`
   padding: 8px 0;
 `;
 
-export default withAuthUser()(Route);
+export default Route;

@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { io, Socket } from "socket.io-client";
 import Image from "next/image";
 import Link from "next/link";
-import firebase from "firebase";
 import { useRouter } from "next/router";
 import ScheduleBox from "../../components/Console/ScheduleBox";
 import FilledButton from "../../components/Button/FilledButton";
@@ -199,7 +198,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
     lng: 126.978,
   });
   const [path, setPath] = useState<number[][]>([]);
-  const [statioinData, setStatioinData] = useState<StationDataType[]>([]);
+  const [stationData, setStationData] = useState<StationDataType[]>([]);
   const router = useRouter();
   const [socketData, setSocketData] = useState<SocketData>();
   const [openSlider, setOpenSlider] = useState(false);
@@ -229,6 +228,11 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
     );
   };
 
+  /**
+   * 라우트 id를 통해서 노선의 경로를 받아오며, 소켓과 연결을 시도함
+   * @param route_id
+   * @param shuttle_direction
+   */
   const getRoute = async (route_id: string, shuttle_direction: number) => {
     const token = getCookie("token");
     const {
@@ -237,15 +241,13 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
       station_count,
       station_data,
       total_passenger_count,
-    }: RouteType = await fetch(`/api/route/1`, {
+    }: RouteType = await fetch(`/api/route/2`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
         accept: "application/json",
       },
-    }).then((res) => {
-      return res.json();
-    });
+    }).then(async (res) => res.json());
     socket.emit("test console", JSON.stringify({ bearer: token }));
     socket.on(
       "data",
@@ -262,15 +264,15 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
         });
       }
     );
-    // setPath(path);
-    // setStatioinData(station_data);
-    // let lat = 0;
-    // let lng = 0;
-    // for (let i = 0; i < path.length; i++) {
-    //   lat += path[i][1];
-    //   lng += path[i][0];
-    // }
-    // setCenter({ lat: lat / path_count, lng: lng / path_count });
+    setPath(path);
+    setStationData(station_data);
+    let lat = 0;
+    let lng = 0;
+    for (let i = 0; i < path.length; i++) {
+      lat += path[i][1];
+      lng += path[i][0];
+    }
+    setCenter({ lat: lat / path_count, lng: lng / path_count });
   };
 
   useEffect(() => {
@@ -346,8 +348,8 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
               mapContainerStyle={{ height: "100%", width: "100%" }}
             >
               <RouteRenderer
-                markers={statioinData}
-                path={[]}
+                markers={stationData}
+                path={path}
                 nowBusPos={socketData}
               />
             </GoogleMap>

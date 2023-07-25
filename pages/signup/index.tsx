@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import {} from "next-firebase-auth";
 import InputBox from "../../components/Input/InputBox";
 import { useRouter } from "next/router";
 import { phoneRegex, pwRegex } from "../../utils/regex";
