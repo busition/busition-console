@@ -4,8 +4,9 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button/Button";
-import Header from "../components/Header";
+import HomeHeader from "../components/Headers/HomeHeader";
 import styled from "styled-components";
+import Homefooter from "../components/Footer/HomeFooter";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -32,7 +33,7 @@ const Home: NextPage = () => {
 
   return (
     <div className="bg-[#fafafa]">
-      <Header />
+      <HomeHeader />
 
       <section className="h-[100vh]" id="home">
         <div className="grid grid-cols-1 md:grid-cols-2 h-full justify-center items-center">
@@ -68,7 +69,6 @@ const Home: NextPage = () => {
               <h3 className="text-lg sm:text-2xl">버스 현황 관리</h3>
             </div>
             <Button text="콘솔로 이동하기" primary={true} link="/console" />
-
           </div>
         </div>
       </section>
@@ -201,12 +201,12 @@ const Home: NextPage = () => {
                   <div className="mt-[25px]">
                     <Link href={"/login"}>
                       <a>
-                      {/* <button className="bg-[#006EF5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
+                        {/* <button className="bg-[#006EF5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
                           Downgrade +
                       </button> */}
-                    <button className="bg-[#E1E3E5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
-                      Current Plan
-                    </button>
+                        <button className="bg-[#E1E3E5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
+                          Current Plan
+                        </button>
                       </a>
                     </Link>
                   </div>
@@ -269,7 +269,7 @@ const Home: NextPage = () => {
                       Current Plan
                     </button> */}
                     <button className="bg-[#006EF5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
-                          Upgrade +
+                      Upgrade +
                     </button>
                   </div>
                 </div>
@@ -329,7 +329,7 @@ const Home: NextPage = () => {
                     </p>
                     <p className="text-[#717F87] text-[14px] leading-[24px] font-medium">
                       탑승자 안심번호
-                    </p> 
+                    </p>
                   </div>
 
                   <div className="mt-[25px]">
@@ -365,7 +365,7 @@ const Home: NextPage = () => {
           </a>
         </Link>
       </section>
-      <section className=" max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12">
+      {/* <section className=" max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12">
         <div className="text-center pb-12">
           <h2 className="text-base font-bold text-indigo-600">
             We have the best equipment
@@ -385,13 +385,10 @@ const Home: NextPage = () => {
             </div>
             <div className="text-center">
               <p className="text-xl text-gray-700 font-bold mb-2">우정헌</p>
-              <p className="text-base text-gray-600 font-normal">
-                xxxx1644
-              </p>
+              <p className="text-base text-gray-600 font-normal">xxxx1644</p>
               <p className="text-base text-gray-400 font-normal">
                 Backend developer
               </p>
-        
             </div>
           </div>
           <div className="w-full bg-white rounded-lg p-12 flex flex-col justify-center items-center shadow-md">
@@ -404,9 +401,7 @@ const Home: NextPage = () => {
             </div>
             <div className="text-center">
               <p className="text-xl text-gray-700 font-bold mb-2">유경민</p>
-              <p className="text-base text-gray-600 font-normal">
-                xxxx1645
-              </p>
+              <p className="text-base text-gray-600 font-normal">xxxx1645</p>
               <p className="text-base text-gray-400 font-normal">
                 Android developer
               </p>
@@ -422,16 +417,15 @@ const Home: NextPage = () => {
             </div>
             <div className="text-center">
               <p className="text-xl text-gray-700 font-bold mb-2">김준혁</p>
-              <p className="text-base text-gray-600 font-normal">
-                xxxx1596
-              </p>
+              <p className="text-base text-gray-600 font-normal">xxxx1596</p>
               <p className="text-base text-gray-400 font-normal">
                 Application developer
               </p>
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
+      <Homefooter />
     </div>
   );
 };

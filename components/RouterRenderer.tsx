@@ -23,7 +23,7 @@ interface RouteRenderProps {
   nowBusPos?: { location: number[]; delayed: number; speed: number };
 }
 
-const RouteRender = ({ markers, path, nowBusPos }: RouteRenderProps) => {
+const RouteRenderer = ({ markers, path, nowBusPos }: RouteRenderProps) => {
   // path 데이터를 api에서 사용할 수 있도록 형식을 바꿔줌
   const route_path = path.map((route: number[], id: number) => {
     const data = { lat: route[1], lng: route[0] };
@@ -114,31 +114,7 @@ const RouteRender = ({ markers, path, nowBusPos }: RouteRenderProps) => {
   );
 };
 
-function GoogleMapViewer({
-  center,
-  markers,
-  zoom = 12,
-  path,
-  nowBusPos,
-}: GoogleMapViewerProps) {
-  const apiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-  return (
-    <GoogleMapContainer>
-      <LoadScriptNext googleMapsApiKey={apiKey}>
-        <GoogleMap
-          mapContainerStyle={{ width: "100%", height: "100%" }}
-          center={center}
-          zoom={zoom}
-        >
-          <RouteRender markers={markers} path={path} nowBusPos={nowBusPos} />
-        </GoogleMap>
-      </LoadScriptNext>
-    </GoogleMapContainer>
-  );
-}
-
-export default React.memo(GoogleMapViewer);
+export default RouteRenderer;
 
 const GoogleMapContainer = styled.div`
   width: 100%;

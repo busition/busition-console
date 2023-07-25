@@ -35,3 +35,25 @@ a {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.bar {
+  background: rgba(59, 72, 89, 0.2);
+  width: 1px;
+  height: 10px;
+  display: inline-block;
+  line-height: 10px;
+  margin: 0 6px;
+  vertical-align: baseline;
+}
+
+@media (max-width: 767px) {
+  .break-mobile {
+    width: 0;
+    height: 0;
+    display: block;
+  }
+
+  .bar {
+    margin: 0 4px;
+  }
+}

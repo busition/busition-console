@@ -3,9 +3,6 @@ import { BusitionConsoleProvider } from "../components/context/context";
 import { prefix } from "../config/config";
 import type { AppProps } from "next/app";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import initAuth from "../utils/initAuth";
-
-initAuth();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
