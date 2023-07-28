@@ -1,19 +1,35 @@
+import Link from "next/link";
 import styled from "styled-components";
 
-export default function Homefooter() {
+export default function HomeFooter() {
   return (
     <footer className="sm:w-full pb-[28px] sm:mx-auto sm:max-w-2xl mx-auto lg:w-full lg:max-w-full px-[20px]">
       <Address className="text-sm mb-[12px]">
-        상호명 버지션(busition)
+        상호명 : 버지션 (Busition)
         <span className="bar" />
         대표자명 : 우정헌
         <span className="bar break-mobile" />
         사업자등록번호 : 117-20-13096
-        <p className="text-[#3b4859]">연락처 : 010-5942-1248</p>
+        <p className="text-[#3b4859]">
+          연락처 : 010-5942-1248
+          <span className="bar break-mobile" />
+          이메일 : contact@busition.io
+        </p>
         사업장 주소 : 광주광역시 서구 하남대로710번길 20, 510동 801호
         <p className="text-[#3b4859]">과세여부 : 일반과세자</p>
       </Address>
-      <p className="text-[#3b4859] text-sm">made by 이승원</p>
+      <p className="text-sm" style={{ color: "rgba(59, 72, 89, 0.6)" }}>
+        개인정보관리책임자 : 유경민
+      </p>
+      <p className="text-[#3b4859] text-sm">
+        <Link href={"/policy/service"}>
+          <a className="cursor-pointer">이용약관</a>
+        </Link>
+        <span className="bar" />
+        <Link href={"/policy/privacy"}>
+          <a className="cursor-pointer">개인정보 처리방침</a>
+        </Link>
+      </p>
     </footer>
   );
 }
