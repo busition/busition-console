@@ -338,6 +338,8 @@ export default function Service() {
           서비스와 관련하여 분쟁이 발생한 경우 관할법원은 회사 소재지
           관할법원으로 정하며, 준거법은 대한민국의 법령을 적용합니다.
         </p>
+
+        <h2 className="text-lg font-semibold">부칙</h2>
         <h2 className="text-lg font-semibold">제 1조(시행일)</h2>
         <p>본 약관은 2023.07.28부터 시행됩니다.</p>
       </div>
