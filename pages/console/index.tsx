@@ -416,6 +416,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     }
   ).then((response) => response.json());
+  console.log(schedule_data);
   return {
     props: { schedule_count, schedule_data },
   };
