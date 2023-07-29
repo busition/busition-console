@@ -47,11 +47,12 @@ const LoginPage = () => {
           deleteCookie("token");
         }
         setCookie("token", data.access_token);
-        router.replace("/console");
+        router.replace("/user");
       })
-      .catch((error) =>
-        setErrorMsg({ type: "로그인 실패", msg: error.message })
-      );
+      .catch((error) => {
+        console.log(error);
+        setErrorMsg({ type: "로그인 실패", msg: error.message });
+      });
   };
 
   return (

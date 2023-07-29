@@ -30,6 +30,14 @@ const Home: NextPage = () => {
       }
     }
   };
+  const handleBusinessRouter = (type: "std" | "pro") => {
+    router.push({
+      pathname: "/business",
+      query: {
+        type,
+      },
+    });
+  };
 
   return (
     <div className="bg-[#fafafa]">
@@ -49,7 +57,7 @@ const Home: NextPage = () => {
               </h3>
               <h3 className="text-lg sm:text-2xl">지금 바로 Busition으로!</h3>
             </div>
-            <Button text="Get started" primary={true} link="/console" />
+            <Button text="Get started" primary={true} link="/user" />
           </div>
         </div>
       </section>
@@ -193,13 +201,9 @@ const Home: NextPage = () => {
                   </div>
 
                   <div className="mt-[25px]">
-                    <Link href={"/business"}>
-                      <a>
-                        <button className="bg-[#E1E3E5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
-                          Current Plan
-                        </button>
-                      </a>
-                    </Link>
+                    <button className="bg-[#E1E3E5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold cursor-not-allowed">
+                      Current Plan
+                    </button>
                   </div>
                 </div>
               </div>
@@ -256,13 +260,12 @@ const Home: NextPage = () => {
                   </div>
 
                   <div className="mt-[25px]">
-                    <Link href={"/business"}>
-                      <a>
-                        <button className="bg-[#006EF5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
-                          Upgrade +
-                        </button>
-                      </a>
-                    </Link>
+                    <button
+                      onClick={() => handleBusinessRouter("std")}
+                      className="bg-[#006EF5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold"
+                    >
+                      Upgrade +
+                    </button>
                   </div>
                 </div>
               </div>
@@ -328,13 +331,12 @@ const Home: NextPage = () => {
                   </div>
 
                   <div className="mt-[25px]">
-                    <Link href={"/business"}>
-                      <a>
-                        <button className="bg-[#006EF5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold">
-                          Upgrade +
-                        </button>
-                      </a>
-                    </Link>
+                    <button
+                      onClick={() => handleBusinessRouter("pro")}
+                      className="bg-[#006EF5] rounded-[5px] py-[15px] px-[25px] text-[#fff] text-[14px] leading-[17px] font-semibold"
+                    >
+                      Upgrade +
+                    </button>
                   </div>
                 </div>
               </div>

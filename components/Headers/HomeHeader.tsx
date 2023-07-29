@@ -21,7 +21,7 @@ export default function HomeHeader() {
             ))}
           </div>
 
-          <Button text="Get started" primary={true} link="/console" />
+          <Button text="Get started" primary={true} link="/user" />
         </div>
       </div>
     </header>
