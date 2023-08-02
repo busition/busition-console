@@ -1,8 +1,9 @@
-import { AuthAction, withAuthUser } from "next-firebase-auth";
 import React, { useState } from "react";
-import firebase from "firebase";
 import Link from "next/link";
 import GoogleLoginButton from "../../components/Button/GoogleLoginButton";
+import { jsonToFormEncoded } from "../../utils/functions";
+import { deleteCookie, hasCookie, setCookie } from "cookies-next";
+import { useRouter } from "next/router";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +12,7 @@ const LoginPage = () => {
     type: "",
     msg: "",
   });
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,16 +20,39 @@ const LoginPage = () => {
       type: "",
       msg: "",
     });
-    try {
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .catch((error) =>
-          setErrorMsg({ type: "Failed to login", msg: error.message })
-        );
-    } catch (error: any) {
-      console.log(error.message);
-    }
+
+    fetch("/api/auth/users/token?busition_platform=Busition-Console", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+        accept: "application/json",
+      },
+      body: jsonToFormEncoded({
+        grant_type: "",
+        username: email,
+        password: password,
+        scope: "",
+        client_id: "",
+        client_secret: "",
+      }),
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error((await res.json()).detail);
+        }
+        return res.json();
+      })
+      .then((data: { access_token: string; token_type: string }) => {
+        if (hasCookie("token")) {
+          deleteCookie("token");
+        }
+        setCookie("token", data.access_token);
+        router.replace("/user");
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrorMsg({ type: "로그인 실패", msg: error.message });
+      });
   };
 
   return (
@@ -117,8 +142,4 @@ const LoginPage = () => {
   );
 };
 
-export default withAuthUser({
-  whenAuthed: AuthAction.REDIRECT_TO_APP,
-  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
-  whenUnauthedAfterInit: AuthAction.RENDER,
-})(LoginPage);
+export default LoginPage;

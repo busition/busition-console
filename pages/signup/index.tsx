@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import {
-  AuthAction,
-  useAuthUser,
-  withAuthUser,
-  withAuthUserTokenSSR,
-} from "next-firebase-auth";
-import {} from "next-firebase-auth";
-import firebase from "firebase";
 import InputBox from "../../components/Input/InputBox";
+import { useRouter } from "next/router";
+import { phoneRegex, pwRegex } from "../../utils/regex";
 
 const SignUp = () => {
-  const regex = /^010\d{4}\d{4}$/;
+  const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -33,47 +27,46 @@ const SignUp = () => {
       type: "",
       msg: "",
     });
-    if (!regex.test(phoneNumber)) {
+    if (!phoneRegex.test(phoneNumber)) {
       setErrorMsg({
         type: "전화번호 형식이 맞지 않습니다.",
         msg: "전화번호는 '-'를 빼고 01012345678 처럼 작성해주시기 바랍니다.",
       });
       return;
+    } else if (!pwRegex.test(password)) {
+      setErrorMsg({
+        type: "비밀번호 형식이 맞지 않습니다.",
+        msg: "비밀번호는 특수문자와 숫자가 최소 하나 이상씩 포함되어 있어야 하며, 8-15자 사이여야 합니다.",
+      });
+      return;
     }
-    try {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(async (credential) => {
-          const token = credential.user?.getIdToken();
-          const res = await fetch("/api/signup", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              type: 1,
-              phone_number: `+82${phoneNumber.substring(1)}`,
-              user_name: name,
-              user_email: email,
-            }),
-          });
-          if (res.status != 200) {
-            firebase.auth().signOut();
-            setErrorMsg({
-              type: "Failed to sign up",
-              msg: "회원가입에 실패했습니다.",
-            });
-          }
-        })
-        .catch(async (error) => {
-          const msg = await error;
-          setErrorMsg({ type: "Failed to sign up", msg: error.message });
-        });
-    } catch (error: any) {
-      setErrorMsg({ type: "Failed to sign up", msg: error.message });
-      console.log(error.message);
-    }
+    fetch("/api/auth/users/?auth_type=Email", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        accept: "application/json",
+      },
+      body: JSON.stringify({
+        password: password,
+        username: name,
+        email: email,
+        phone_number: phoneNumber,
+      }),
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error((await res.json()).msg);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data.status == "success") {
+          router.replace("/login");
+        }
+      })
+      .catch((error) =>
+        setErrorMsg({ type: "회원가입 실패!", msg: error.message })
+      );
   };
 
   return (
@@ -122,4 +115,4 @@ const SignUp = () => {
   );
 };
 
-export default withAuthUser({ whenAuthed: AuthAction.REDIRECT_TO_APP })(SignUp);
+export default SignUp;

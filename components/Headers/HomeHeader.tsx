@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Button from "./Button/Button";
+import Button from "../Button/Button";
 
-export default function Header() {
+export default function HomeHeader() {
   const modes: string[] = ["console", "driver", "mate", "price"];
 
   return (
@@ -21,7 +21,7 @@ export default function Header() {
             ))}
           </div>
 
-          <Button text="Get started" primary={true} link="/console" />
+          <Button text="Get started" primary={true} link="/user" />
         </div>
       </div>
     </header>
