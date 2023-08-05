@@ -9,7 +9,7 @@ interface Props {
 export default function UserPageHeader({ isScroll, handleClick }: Props) {
   return (
     <header
-      className={`bg-white h-[48px] w-full sticky top-0 md:h-[64px] z-50 ${
+      className={`bg-white h-[48px] w-full top-0 md:h-[64px] z-50 ${
         isScroll ? "shadow-md" : ""
       }`}
     >

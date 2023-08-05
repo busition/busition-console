@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+
 /**
  * 입력받은 문자열의 첫 번째 문자를 대문자로 만들고 나머지는 소문자로 만들어서 반환시켜 줌.
  * @param str string
@@ -26,4 +28,19 @@ export function jsonToFormEncoded(jsonObj: { [key: string]: any }): string {
  */
 export function formatNumber(num: number): string {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+}
+
+/**
+ * JWT 토큰을 입력으로 받고, 해당 토큰이 만료되었는지 확인하는 함수.
+ * @param token JWT token is needed
+ * @returns boolean. if the token is expired, then it will return true
+ */
+export function isExpired(token: string): boolean {
+  const decodedToken = jwt.decode(token);
+  const expirationDate = (decodedToken as jwt.JwtPayload).exp;
+  if (expirationDate !== undefined) {
+    return Date.now() >= expirationDate * 1000;
+  } else {
+    return false;
+  }
 }

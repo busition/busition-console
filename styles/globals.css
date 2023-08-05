@@ -57,3 +57,7 @@ a {
     margin: 0 4px;
   }
 }
+
+.body_term {
+  white-space: pre-line;
+}
