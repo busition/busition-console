@@ -18,9 +18,19 @@ interface TableItem {
   latlng: number[];
 }
 
+interface routeType {
+  name: string;
+  description: string;
+  shuttle_direction: number;
+  day_of_week: number[];
+}
+
+interface stationType {}
+
 let idx = 0;
 
 const Route = () => {
+  // useState 변수들
   const [open, setOpen] = useState<boolean>(false);
   const [state, setState] = useState<TableItem[]>([
     { id: idx, stationName: "", latlng: [] },
@@ -32,6 +42,10 @@ const Route = () => {
   }>({ lat: undefined, lng: undefined });
   const [activeMarker, setActiveMarker] = useState(-1);
   const router = useRouter();
+  const [routeName, setRouteName] = useState<string>("");
+
+  // api 관련 함수
+  const sendRoute = () => {};
 
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
@@ -74,6 +88,18 @@ const Route = () => {
           className="flex flex-col h-1/2
        w-full px-20 py-20 overflow-y-scroll"
         >
+          <div className="w-full flex flex-row justify-center items-center gap-[12px] my-[20px]">
+            <label className="" htmlFor="name">
+              노선 이름
+            </label>
+            <input
+              className="border-solid border rounded text-end"
+              type="text"
+              value={routeName}
+              onChange={(e) => setRouteName(e.target.value)}
+              id="name"
+            />
+          </div>
           <Table className="w-full rounded-md">
             <thead>
               <TableHeadRow>

@@ -11,12 +11,12 @@ const ItemCard = () => {
   const router = useRouter();
 
   return (
-    <div className="w-full border-2 border-solid rounded-lg flex flex-col px-[24px] py-[24px]">
+    <div className="border-2 border-solid rounded-lg flex flex-col px-[24px] py-[24px] ml-[12px] mt-[24px]">
       <p className="font-semibold text-xl pb-[16px]">버지션 콘솔</p>
       <p>
         버스 위치와 노선 정보를 확인하고 관리할 수 있는 콘솔 창으로 이동합니다.
       </p>
-      <div className="w-full flex flex-row justify-end pt-[8px]">
+      <div className="flex flex-row justify-end pt-[8px]">
         <Button
           text="이동"
           primary={true}
@@ -55,7 +55,7 @@ const userPage = () => {
   }, []);
 
   return (
-    <MainContainer className="overflow-hidden">
+    <MainContainer className="overflow-hidden relative">
       <UserPageHeader
         isScroll={isScroll}
         handleClick={() => {
@@ -63,17 +63,27 @@ const userPage = () => {
           router.reload();
         }}
       />
-      <Container>
-        <SideNav>
-          <div>홈</div>
-          <div>개인 정보</div>
-          <div>결제 및 구독</div>
-        </SideNav>
-        <div
-          className="w-full h-full px-[48px] overflow-y-scroll flex flex-col"
-          ref={userBox}
-        >
-          <div className="w-full h-[30%] flex flex-col justify-center items-center">
+      <div
+        className={`w-full block z-10 mt-[-10px] pt-[10px] lg:hidden ${
+          isScroll ? "shadow-md" : ""
+        } border-solid border-b`}
+      >
+        <nav>
+          <ul className="w-full flex flex-row h-[48px] items-center">
+            <li className="mx-auto px-[16px] text-sm">홈</li>
+            <li className="mx-auto px-[16px] text-sm">개인 정보</li>
+            <li className="mx-auto px-[16px] text-sm">구독 및 결제</li>
+          </ul>
+        </nav>
+      </div>
+      <SideNav className="">
+        <div>홈</div>
+        <div>개인 정보</div>
+        <div>결제 및 구독</div>
+      </SideNav>
+      <Container className="overflow-y-scroll" ref={userBox}>
+        <div className="lg:px-[48px] lg:max-w-[1120px] max-w-[840px] px-[24px] mx-auto">
+          <div className="h-[30%] flex flex-col justify-center items-center pt-[24px]">
             <p className="text-2xl font-semibold">
               이승원님, 버지션 사용을 환영합니다.
             </p>
@@ -130,18 +140,25 @@ const MainContainer = styled.div`
 `;
 
 const Container = styled.div`
-  width: 100%;
   height: 100%;
-  display: grid;
-  grid-template-columns: 280px 1fr;
+  display: block;
+
+  @media (min-width: 1024px) {
+    margin-left: 280px;
+  }
 `;
+
 const SideNav = styled.nav`
+  position: absolute;
+  top: 64px;
+  left: 0;
+  z-index: 1;
   width: 280px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
   padding-top: 20px;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
 
   div {
     padding: 10px 0;
