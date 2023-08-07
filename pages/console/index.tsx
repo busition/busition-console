@@ -288,11 +288,20 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
     <div className="relative">
       <GridContainer className="">
         <div className=" h-screen bg-white shadow-xl overflow-auto z-50">
-          <div className="flex sticky top-0 items-center justify-center w-full bg-blue-500 h-[56px] shadow-md z-50">
+          <div className="flex sticky top-0 items-center justify-around w-full bg-blue-500 h-[56px] shadow-md z-50">
+            <div className="h-full flex">
+              <Image
+                src={"/icon/homeIcon.svg"}
+                width={32}
+                height={32}
+                onClick={() => router.push("/")}
+                className="cursor-pointer invert"
+              />
+            </div>
             <h1 className="text-white text-center text-lg font-bold">
               SCHEDULE
             </h1>
-            <div className="absolute right-[8px] h-full flex justify-center">
+            <div className="h-full flex justify-center">
               <Image
                 className="cursor-pointer"
                 src={"/logout.svg"}
@@ -422,4 +431,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   };
 };
 
-export default React.memo(ConsoleHome);
+export default ConsoleHome;

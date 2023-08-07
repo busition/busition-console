@@ -47,7 +47,7 @@ const LoginPage = () => {
           deleteCookie("token");
         }
         setCookie("token", data.access_token);
-        router.replace("/user");
+        router.replace("/console");
       })
       .catch((error) => {
         console.log(error);
