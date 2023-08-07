@@ -11,6 +11,7 @@ import {
 import { ReactSortable } from "react-sortablejs";
 import Button from "../../components/Button/Button";
 import { useRouter } from "next/router";
+import { getCookie } from "cookies-next";
 
 interface TableItem {
   id: number;
@@ -45,7 +46,25 @@ const Route = () => {
   const [routeName, setRouteName] = useState<string>("");
 
   // api 관련 함수
-  const sendRoute = () => {};
+  const sendRoute = async () => {
+    const data = await fetch("/api/route/", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+        authorization: `Bearer ${getCookie("token")}`,
+      },
+      body: JSON.stringify([
+        {
+          name: routeName,
+          description: "",
+          shuttle_direction: 0,
+          day_of_week: [],
+        },
+      ]),
+    }).then((res) => res.json());
+    console.log(data);
+  };
 
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
@@ -190,7 +209,7 @@ const Route = () => {
       </div>
       <div className="w-full flex flex-row h-[100px] justify-center items-center gap-[12px]">
         <Button text="취소" onClick={() => router.push("/console")} />
-        <Button text="저장" primary={true} />
+        <Button text="저장" primary={true} onClick={() => sendRoute()} />
       </div>
       <Modal
         isOpen={open}

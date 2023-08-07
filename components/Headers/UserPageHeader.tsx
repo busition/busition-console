@@ -20,6 +20,11 @@ export default function UserPageHeader({ isScroll, handleClick }: Props) {
         }
       }
     };
+    if (window.innerWidth >= 1024) {
+      setIsResized(true);
+    } else {
+      setIsResized(false);
+    }
 
     window.addEventListener("resize", handleResize);
 
