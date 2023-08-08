@@ -19,6 +19,10 @@ const nextConfig = {
         destination: "https://api.dev2.busition.com/latest/:path*",
       },
       {
+        source: "/api/stations/",
+        destination: "https://api.dev2.busition.com/latest/stations/",
+      },
+      {
         source: "/api/:path*",
         destination: "https://api.dev2.busition.com/latest/:path*",
       },

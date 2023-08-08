@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "../../components/Modal/Modal";
 import Geocode from "react-geocode";
@@ -19,15 +19,6 @@ interface TableItem {
   latlng: number[];
 }
 
-interface routeType {
-  name: string;
-  description: string;
-  shuttle_direction: number;
-  day_of_week: number[];
-}
-
-interface stationType {}
-
 let idx = 0;
 
 const Route = () => {
@@ -45,9 +36,30 @@ const Route = () => {
   const router = useRouter();
   const [routeName, setRouteName] = useState<string>("");
 
+  // useEffect
+  useEffect(() => {
+    const routeId = router.query.id;
+    const getData = async () => {
+      const routeData = await fetch(`/api/routes/${routeId}`, {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      }).then((res) => res.json());
+      console.log(routeData);
+    };
+    if (routeId) {
+      getData();
+    }
+
+    return () => {};
+  }, []);
+
   // api 관련 함수
   const sendRoute = async () => {
-    const data = await fetch("/api/route/", {
+    const data = await fetch("/api/routes/", {
       method: "POST",
       headers: {
         accept: "application/json",
@@ -63,7 +75,27 @@ const Route = () => {
         },
       ]),
     }).then((res) => res.json());
-    console.log(data);
+
+    const response = await fetch("/api/stations/", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+        authorization: `Bearer ${getCookie("token")}`,
+      },
+      body: JSON.stringify(
+        state.map((item, index) => {
+          return {
+            route_id: data.route_id,
+            station_name: item.stationName,
+            station_latitude: item.latlng[0],
+            station_longitude: item.latlng[1],
+            stopping_order: index + 1,
+          };
+        })
+      ),
+    }).then((res) => res.json());
+    console.log(response);
   };
 
   return (
