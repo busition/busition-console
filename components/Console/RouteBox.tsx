@@ -1,15 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import SmallMenuModal from "../Modal/SmallMenuModal";
 
 interface RouteBoxProps {
-  routeId: string;
+  routeId: number;
   startStation: string;
   destStation: string;
   direction: number;
   onClickFunction: Function;
-  index: number;
+  name: string;
   sliderHandler: Function;
   handleSelected: (name: string) => void;
 }
@@ -20,16 +21,19 @@ export default function RouteBox({
   destStation,
   direction,
   onClickFunction,
-  index,
   sliderHandler,
+  name,
   handleSelected,
 }: RouteBoxProps) {
   const [modalOpen, setModalOpen] = useState(false);
+  const router = useRouter();
+
+  console.log(routeId);
 
   return (
     <div className="flex flex-col w-full h-[200px] rounded-xl shadow-md z-0">
       <div className="relative flex flex-row w-full bg-[#FFE6AA] rounded-t-xl px-5 py-2 justify-center items-center">
-        <h1 className="font-semibold text-xl">{index}번 노선</h1>
+        <h1 className="font-semibold text-xl">{name}</h1>
         <button className="absolute flex right-4">
           <Image
             src={"/menu.svg"}
@@ -39,11 +43,20 @@ export default function RouteBox({
           />
           <SmallMenuModal isOpen={modalOpen}>
             <div className="w-full flex flex-col">
-              <Link href={"/route"}>
-                <a>
-                  <button className="font-semibold">편집하기</button>
-                </a>
-              </Link>
+              <button
+                className="font-semibold"
+                onClick={() =>
+                  router.push({
+                    pathname: "/route",
+                    query: {
+                      routeId,
+                    },
+                  })
+                }
+              >
+                편집하기
+              </button>
+
               <button className="font-semibold text-red-600">삭제하기</button>
             </div>
           </SmallMenuModal>
@@ -67,7 +80,7 @@ export default function RouteBox({
             height={44}
             onClick={() => {
               sliderHandler(true);
-              handleSelected(`${index}번 노선`);
+              handleSelected(`${name}`);
             }}
           />
         </div>
