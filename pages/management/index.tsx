@@ -1,5 +1,6 @@
 import { deleteCookie, getCookie, hasCookie } from "cookies-next";
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
@@ -27,7 +28,7 @@ const ItemCard = () => {
   );
 };
 
-const userPage = () => {
+const Home = () => {
   const [isScroll, setIsScroll] = useState<boolean>(false);
   const router = useRouter();
   const userBox = useRef<HTMLDivElement>(null);
@@ -70,34 +71,51 @@ const userPage = () => {
       >
         <nav>
           <ul className="w-full flex flex-row h-[48px] items-center">
-            <li className="mx-auto px-[16px] text-sm">홈</li>
-            <li className="mx-auto px-[16px] text-sm">개인 정보</li>
-            <li className="mx-auto px-[16px] text-sm">구독 및 결제</li>
+            <li className="mx-auto px-[16px] text-sm border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center">
+              <Link href={"/management"}>
+                <a>홈</a>
+              </Link>
+            </li>
+            <li className="mx-auto px-[16px] text-sm">
+              <Link href={"/management/driver"}>
+                <a>기사 배정</a>
+              </Link>
+            </li>
+            <li className="mx-auto px-[16px] text-sm">
+              <Link href={"/management/organization"}>
+                <a>기관 코드</a>
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>
-      <SideNav className="">
-        <div>홈</div>
-        <div>개인 정보</div>
-        <div>결제 및 구독</div>
+      <SideNav className="border-solid border-r">
+        <ul>
+          <Link href={"/management"}>
+            <a>
+              <li className="border-solid border-r-blue-500 border-r-4">홈</li>
+            </a>
+          </Link>
+          <Link href={"/management/driver"}>
+            <a>
+              <li>기사 배정</li>
+            </a>
+          </Link>
+          <Link href={"/management/organization"}>
+            <a>
+              <li>기관 코드</li>
+            </a>
+          </Link>
+        </ul>
       </SideNav>
-      <Container className="overflow-y-scroll" ref={userBox}>
+      <Container className="overflow-y-scroll block" ref={userBox}>
         <div className="lg:px-[48px] lg:max-w-[1120px] max-w-[840px] px-[24px] mx-auto">
           <div className="h-[30%] flex flex-col justify-center items-center pt-[24px]">
             <p className="text-2xl font-semibold">
               이승원님, 버지션 사용을 환영합니다.
             </p>
-            <p className="mt-5">
-              이 페이지에서 노선 및 관련 정보를 확인할 수 있습니다.
-            </p>
+            <p className="mt-5">버지션 관리 페이지 입니다.</p>
           </div>
-
-          <ItemCard />
-          <ItemCard />
-
-          <ItemCard />
-
-          <ItemCard />
 
           <ItemCard />
         </div>
@@ -132,16 +150,12 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 const MainContainer = styled.div`
   width: 100vw;
   height: 100vh;
-  display: grid;
-  grid-template-rows: 64px 1fr;
-  @media (max-width: 767px) {
-    grid-template-rows: 48px 1fr;
-  }
+  display: flex;
+  flex-direction: column;
 `;
 
 const Container = styled.div`
   height: 100%;
-  display: block;
 
   @media (min-width: 1024px) {
     margin-left: 280px;
@@ -154,17 +168,18 @@ const SideNav = styled.nav`
   left: 0;
   z-index: 1;
   width: 280px;
+  height: 100%;
   padding-top: 20px;
 
   @media (max-width: 1024px) {
     display: none;
   }
 
-  div {
+  li {
     padding: 10px 0;
     padding-left: 24px;
     padding-right: 16px;
   }
 `;
 
-export default userPage;
+export default Home;
