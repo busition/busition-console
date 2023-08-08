@@ -11,7 +11,9 @@ import {
 import { ReactSortable } from "react-sortablejs";
 import Button from "../../components/Button/Button";
 import { useRouter } from "next/router";
-import { getCookie } from "cookies-next";
+import { getCookie, hasCookie } from "cookies-next";
+import { isExpired } from "../../utils/functions";
+import { GetServerSideProps } from "next";
 
 interface TableItem {
   id: number;
@@ -19,9 +21,18 @@ interface TableItem {
   latlng: number[];
 }
 
+interface Props {
+  station_data: {
+    station_name: string;
+    station_latitude: number;
+    station_longitude: number;
+  }[];
+}
+
 let idx = 0;
 
-const Route = () => {
+const Route = ({ station_data }: Props) => {
+  // console.log(station_data);
   // useState 변수들
   const [open, setOpen] = useState<boolean>(false);
   const [state, setState] = useState<TableItem[]>([
@@ -38,20 +49,16 @@ const Route = () => {
 
   // useEffect
   useEffect(() => {
-    const routeId = router.query.id;
-    const getData = async () => {
-      const routeData = await fetch(`/api/routes/${routeId}`, {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
-      }).then((res) => res.json());
-      console.log(routeData);
-    };
-    if (routeId) {
-      getData();
+    if (station_data) {
+      setState(
+        station_data.map((data) => {
+          return {
+            id: ++idx,
+            stationName: data.station_name,
+            latlng: [data.station_latitude, data.station_longitude],
+          };
+        })
+      );
     }
 
     return () => {};
@@ -402,5 +409,51 @@ const TableRow = styled.tr`
 const TableData = styled.td`
   padding: 8px 0;
 `;
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  res,
+  query,
+}) => {
+  const { routeId } = query;
+
+  if (!hasCookie("token", { req, res })) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  } else if (isExpired(getCookie("token", { req, res }) as string)) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // routeId로 조회
+  if (routeId) {
+    const { station_data } = await fetch(
+      `https://api.dev2.busition.com/latest/routes/${routeId}`,
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("token", { req, res })}`,
+        },
+      }
+    ).then((response) => response.json());
+    return {
+      props: { station_data },
+    };
+  }
+  return {
+    props: {},
+  };
+};
 
 export default Route;
