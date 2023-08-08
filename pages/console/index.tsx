@@ -241,7 +241,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
       station_count,
       station_data,
       total_passenger_count,
-    }: RouteType = await fetch(`/api/route/2`, {
+    }: RouteType = await fetch(`/api/routes/2`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -416,16 +416,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     };
   }
   const token = getCookie("token", { req, res });
-  const { schedule_count, schedule_data }: ConsoleHomeProps = await fetch(
-    "https://api.dev2.busition.com/latest/schedule/console/",
+  console.log(token);
+  const { schedule_count, schedule_data } = await fetch(
+    "https://api.dev2.busition.com/latest/schedules/consoles",
     {
       headers: {
         Authorization: `Bearer ${token}`,
         accept: "application/json",
+        "Content-Type": "application/json",
       },
     }
-  ).then((response) => response.json());
-  console.log(schedule_data);
+  ).then(async (response) => {
+    return response.json();
+  });
+
   return {
     props: { schedule_count, schedule_data },
   };
