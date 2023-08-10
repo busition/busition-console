@@ -1,11 +1,8 @@
-import { deleteCookie, getCookie, hasCookie } from "cookies-next";
+import { getCookie, hasCookie } from "cookies-next";
 import { GetServerSideProps } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import Button from "../../components/Button/Button";
-import UserPageHeader from "../../components/Headers/UserPageHeader";
 import ManagementLayout from "../../components/Layout/ManagementLayout";
 import { isExpired } from "../../utils/functions";
 
@@ -30,32 +27,6 @@ const ItemCard = () => {
 };
 
 const Home = () => {
-  const [isScroll, setIsScroll] = useState<boolean>(false);
-  const router = useRouter();
-  const userBox = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (userBox.current) {
-        if (userBox.current.scrollTop == 0) {
-          setIsScroll(false);
-        } else {
-          setIsScroll(true);
-        }
-      }
-    };
-
-    if (userBox.current) {
-      userBox.current.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (userBox.current) {
-        userBox.current?.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
-
   return (
     <ManagementLayout navigation="home">
       <div className="h-[30%] flex flex-col justify-center items-center pt-[24px]">

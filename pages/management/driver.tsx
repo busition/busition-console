@@ -1,13 +1,13 @@
-import { deleteCookie, getCookie, hasCookie } from "cookies-next";
+import { getCookie, hasCookie } from "cookies-next";
 import { GetServerSideProps } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import BorderButton from "../../components/Button/BorderButton";
 import Button from "../../components/Button/Button";
 import FilledButton from "../../components/Button/FilledButton";
-import UserPageHeader from "../../components/Headers/UserPageHeader";
+
 import ManagementLayout from "../../components/Layout/ManagementLayout";
+import ModalBox from "../../components/Modal/ModalBox";
 import { isExpired } from "../../utils/functions";
 
 interface itemCardProps {
@@ -15,6 +15,7 @@ interface itemCardProps {
   arrival: string;
   departure: string;
   routeId: number;
+  handleModal: () => void;
 }
 
 interface homeProps {
@@ -33,6 +34,7 @@ const ItemCard = ({
   arrival,
   departure,
   routeId,
+  handleModal,
 }: itemCardProps) => {
   return (
     <div className=" block mt-[24px]">
@@ -45,39 +47,15 @@ const ItemCard = ({
       </div>
       <div className="border-2 border-solid rounded-b-lg px-[24px] py-[12px] flex flex-row gap-[8px] justify-center items-center">
         현재 배정된 기사 없음
-        <FilledButton text="기사 배정" size="m" />
+        <FilledButton text="기사 배정" size="m" handleOnclick={handleModal} />
       </div>
     </div>
   );
 };
 
 const Home = ({ schedule_data }: homeProps) => {
-  console.log(schedule_data);
-  const [isScroll, setIsScroll] = useState<boolean>(false);
-  const router = useRouter();
-  const userBox = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (userBox.current) {
-        if (userBox.current.scrollTop == 0) {
-          setIsScroll(false);
-        } else {
-          setIsScroll(true);
-        }
-      }
-    };
-
-    if (userBox.current) {
-      userBox.current.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (userBox.current) {
-        userBox.current?.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
+  //   console.log(schedule_data);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   return (
     <ManagementLayout navigation="driver">
@@ -87,8 +65,32 @@ const Home = ({ schedule_data }: homeProps) => {
           arrival={data.destination}
           departure={data.departure_point}
           routeId={data.id}
+          handleModal={() => setModalOpen(true)}
         />
       ))}
+      {modalOpen && (
+        <ModalBox>
+          <div className="w-full h-full flex flex-col justify-center items-center">
+            <div className="w-full h-full flex flex-col">
+              <div className="w-full flex flex-row justify-center items-center gap-[8px]">
+                <input
+                  type="text"
+                  className="border-solid border rounded text-end"
+                />
+                <BorderButton text="추가" />
+              </div>
+            </div>
+            <div className="w-full h-full block">
+              <div className="w-full flex flex-row justify-center">
+                기사 아이디 생성
+              </div>
+            </div>
+            <div className="w-full flex flex-row justify-end">
+              <Button text="닫기" onClick={() => setModalOpen(false)} />
+            </div>
+          </div>
+        </ModalBox>
+      )}
     </ManagementLayout>
   );
 };

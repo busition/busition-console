@@ -44,3 +44,19 @@ export function isExpired(token: string): boolean {
     return false;
   }
 }
+
+/**
+ * 'yyyy-mm-dd'형식의 스트링을 ISO 8601 형식의 스트링으로 반환해주는 함수.
+ * @param dateString 'yyyy-mm-dd' 형식의 스트링 값을 받습니다.
+ * @returns ISO 8601 형식으로 표현된 스트링 값을 리턴합니다.
+ */
+export function convertToISO8601(dateString: string): string {
+  const date = new Date(dateString);
+
+  // 유효한 날짜인지 검사
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date string provided.");
+  }
+
+  return date.toISOString().slice(0, -5) + "Z";
+}
