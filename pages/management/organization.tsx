@@ -8,6 +8,7 @@ import styled from "styled-components";
 import Button from "../../components/Button/Button";
 import FilledButton from "../../components/Button/FilledButton";
 import UserPageHeader from "../../components/Headers/UserPageHeader";
+import ManagementLayout from "../../components/Layout/ManagementLayout";
 import { isExpired } from "../../utils/functions";
 
 const Home = () => {
@@ -62,78 +63,21 @@ const Home = () => {
   }, []);
 
   return (
-    <MainContainer className="overflow-hidden relative">
-      <UserPageHeader
-        isScroll={isScroll}
-        handleClick={() => {
-          deleteCookie("token");
-          router.reload();
-        }}
-      />
-      <div
-        className={`w-full block z-10 mt-[-10px] pt-[10px] lg:hidden ${
-          isScroll ? "shadow-md" : ""
-        } border-solid border-b`}
-      >
-        <nav>
-          <ul className="w-full flex flex-row h-[48px] items-center">
-            <li className="mx-auto px-[16px] text-sm ">
-              <Link href={"/management"}>
-                <a>홈</a>
-              </Link>
-            </li>
-            <li className="mx-auto px-[16px] text-sm">
-              <Link href={"/management/driver"}>
-                <a>기사 배정</a>
-              </Link>
-            </li>
-            <li className="mx-auto px-[16px] text-sm border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center">
-              <Link href={"/management/organization"}>
-                <a>기관 코드</a>
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <SideNav className="border-solid border-r">
-        <ul>
-          <Link href={"/management"}>
-            <a>
-              <li className="">홈</li>
-            </a>
-          </Link>
-          <Link href={"/management/driver"}>
-            <a>
-              <li>기사 배정</li>
-            </a>
-          </Link>
-          <Link href={"/management/organization"}>
-            <a>
-              <li className="border-solid border-r-blue-500 border-r-4">
-                기관 코드
-              </li>
-            </a>
-          </Link>
-        </ul>
-      </SideNav>
-      <Container className="overflow-y-scroll block" ref={userBox}>
-        <div className="lg:px-[48px] lg:max-w-[1120px] max-w-[840px] px-[24px] mx-auto h-full flex flex-col justify-center items-center">
-          <div className="flex flex-col items-center">
-            <h2>기관 코드를 생성하러면 밑에 버튼을 눌러주세요.</h2>
-            <div className="mt-[12px]">
-              <FilledButton text="생성" handleOnclick={getOrgCode} />
-            </div>
-            {orgCode.join_code && (
-              <div className="mt-[20px] flex flex-col items-center">
-                <QRCodeSVG value={orgCode.join_code} />
-
-                <p className="mt-[12px]">{`해당 코드는 ${orgCode.expires_at}까지 사용가능합니다.`}</p>
-              </div>
-            )}
-          </div>
+    <ManagementLayout navigation="org">
+      <div className="flex flex-col items-center">
+        <h2>기관 코드를 생성하러면 밑에 버튼을 눌러주세요.</h2>
+        <div className="mt-[12px]">
+          <FilledButton text="생성" handleOnclick={getOrgCode} />
         </div>
-      </Container>
-    </MainContainer>
+        {orgCode.join_code && (
+          <div className="mt-[20px] flex flex-col items-center">
+            <QRCodeSVG value={orgCode.join_code} />
+
+            <p className="mt-[12px]">{`해당 코드는 ${orgCode.expires_at}까지 사용가능합니다.`}</p>
+          </div>
+        )}
+      </div>
+    </ManagementLayout>
   );
 };
 
@@ -159,40 +103,5 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     props: {},
   };
 };
-
-const MainContainer = styled.div`
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Container = styled.div`
-  height: 100%;
-
-  @media (min-width: 1024px) {
-    margin-left: 280px;
-  }
-`;
-
-const SideNav = styled.nav`
-  position: absolute;
-  top: 64px;
-  left: 0;
-  z-index: 1;
-  width: 280px;
-  height: 100%;
-  padding-top: 20px;
-
-  @media (max-width: 1024px) {
-    display: none;
-  }
-
-  li {
-    padding: 10px 0;
-    padding-left: 24px;
-    padding-right: 16px;
-  }
-`;
 
 export default Home;
