@@ -2,13 +2,13 @@ import { getCookie, hasCookie } from "cookies-next";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import BorderButton from "../../components/Button/BorderButton";
-import Button from "../../components/Button/Button";
-import FilledButton from "../../components/Button/FilledButton";
+import BorderButton from "../../../components/Button/BorderButton";
+import Button from "../../../components/Button/Button";
+import FilledButton from "../../../components/Button/FilledButton";
 
-import ManagementLayout from "../../components/Layout/ManagementLayout";
-import ModalBox from "../../components/Modal/ModalBox";
-import { isExpired } from "../../utils/functions";
+import ManagementLayout from "../../../components/Layout/ManagementLayout";
+import ModalBox from "../../../components/Modal/ModalBox";
+import { isExpired } from "../../../utils/functions";
 
 interface itemCardProps {
   routeName: string;
@@ -53,12 +53,12 @@ const ItemCard = ({
   );
 };
 
-const Home = ({ schedule_data }: homeProps) => {
+const Assignment = ({ schedule_data }: homeProps) => {
   //   console.log(schedule_data);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   return (
-    <ManagementLayout navigation="driver">
+    <ManagementLayout navigation="assignment">
       {schedule_data.map((data) => (
         <ItemCard
           routeName={data.name}
@@ -133,4 +133,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   };
 };
 
-export default Home;
+export default Assignment;

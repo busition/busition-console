@@ -5,6 +5,7 @@ interface buttonProps {
   primary?: boolean;
   link?: string;
   onClick?: () => void;
+  submit?: boolean;
 }
 
 export default function Button({
@@ -12,6 +13,7 @@ export default function Button({
   primary = false,
   link = "",
   onClick = () => {},
+  submit = false,
 }: buttonProps) {
   return (
     <Link href={link}>
@@ -24,6 +26,7 @@ export default function Button({
         onClick={() => {
           onClick();
         }}
+        type={submit ? "submit" : "button"}
       >
         <h3 className={`${primary ? "text-white" : "text-blue-500"}`}>
           {text}

@@ -12,15 +12,15 @@ import { convertToISO8601, isExpired } from "../../utils/functions";
 interface orgCodeType {
   join_code: string;
   generated_at: string;
-  expires_at: string;
+  expired_at: string;
 }
 
-const Home = ({ join_code, generated_at, expires_at }: orgCodeType) => {
-  console.log(expires_at);
+const Home = ({ join_code, generated_at, expired_at }: orgCodeType) => {
+  console.log(expired_at);
   const [orgCode, setOrgCode] = useState<orgCodeType>({
     join_code,
     generated_at,
-    expires_at,
+    expired_at,
   });
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [genDate, setGenDate] = useState<string>("");
@@ -28,7 +28,9 @@ const Home = ({ join_code, generated_at, expires_at }: orgCodeType) => {
   const generateOrgCode = async () => {
     // console.log(JSON.stringify({ expired_at: convertToISO8601(genDate) }));
     await fetch(
-      "/api/organizations/join-code?force_recreate=true&auth_type=Email",
+      `/api/organizations/join-code${
+        genDate ? `?expired_at=${convertToISO8601(genDate)}&` : "?"
+      }force_recreate=true&auth_type=Email`,
       {
         method: "POST",
         headers: {
@@ -36,9 +38,6 @@ const Home = ({ join_code, generated_at, expires_at }: orgCodeType) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${getCookie("token")}`,
         },
-        body: JSON.stringify(
-          genDate ? { expired_at: convertToISO8601(genDate) } : ""
-        ),
       }
     )
       .then((res) => res.json())
@@ -46,7 +45,7 @@ const Home = ({ join_code, generated_at, expires_at }: orgCodeType) => {
         console.log(data);
         setOrgCode({
           join_code: data.join_code,
-          expires_at: data.expires_at,
+          expired_at: data.expired_at,
           generated_at: data.generated_at,
         });
         setModalOpen(false);
@@ -72,7 +71,7 @@ const Home = ({ join_code, generated_at, expires_at }: orgCodeType) => {
           <div className="mt-[20px] flex flex-col items-center">
             <QRCodeSVG value={orgCode.join_code} />
 
-            <p className="mt-[12px]">{`해당 코드는 ${orgCode.expires_at}까지 사용가능합니다.`}</p>
+            <p className="mt-[12px]">{`해당 코드는 ${orgCode.expired_at}까지 사용가능합니다.`}</p>
           </div>
         )}
       </div>
@@ -124,7 +123,7 @@ export const getServerSideProps: GetServerSideProps<orgCodeType> = async ({
     };
   }
   const token = getCookie("token", { req, res });
-  const { join_code, expires_at, generated_at }: orgCodeType = await fetch(
+  const { join_code, expired_at, generated_at }: orgCodeType = await fetch(
     "https://api.dev2.busition.com/latest/organizations/join-code?auth_type=Email",
     {
       method: "GET",
@@ -139,13 +138,13 @@ export const getServerSideProps: GetServerSideProps<orgCodeType> = async ({
     .catch((err) => {
       return {
         join_code: null,
-        expires_at: null,
+        expired_at: null,
         generated_at: null,
       };
     });
 
   return {
-    props: { join_code, expires_at, generated_at },
+    props: { join_code, expired_at, generated_at },
   };
 };
 

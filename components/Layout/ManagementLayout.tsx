@@ -6,7 +6,7 @@ import styled from "styled-components";
 import UserPageHeader from "../Headers/UserPageHeader";
 
 interface Props {
-  navigation: "home" | "driver" | "org";
+  navigation: "home" | "driver" | "org" | "assignment";
 }
 
 export default function ManagementLayout({
@@ -44,12 +44,22 @@ export default function ManagementLayout({
             </li>
             <li
               className={`mx-auto px-[16px] text-sm ${
+                navigation == "assignment" &&
+                "border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center"
+              }`}
+            >
+              <Link href={"/management/driver/assignment"}>
+                <a>기사 배정</a>
+              </Link>
+            </li>
+            <li
+              className={`mx-auto px-[16px] text-sm ${
                 navigation == "driver" &&
                 "border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center"
               }`}
             >
               <Link href={"/management/driver"}>
-                <a>기사 배정</a>
+                <a>기사 관리</a>
               </Link>
             </li>
             <li
@@ -79,6 +89,18 @@ export default function ManagementLayout({
               </li>
             </a>
           </Link>
+          <Link href={"/management/driver/assignment"}>
+            <a>
+              <li
+                className={`${
+                  navigation == "assignment" &&
+                  "border-solid border-r-blue-500 border-r-4"
+                }`}
+              >
+                기사 배정
+              </li>
+            </a>
+          </Link>
           <Link href={"/management/driver"}>
             <a>
               <li
@@ -87,7 +109,7 @@ export default function ManagementLayout({
                   "border-solid border-r-blue-500 border-r-4"
                 }`}
               >
-                기사 배정
+                기사 관리
               </li>
             </a>
           </Link>

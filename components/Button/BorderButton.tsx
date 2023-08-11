@@ -3,10 +3,20 @@ import styled from "styled-components";
 interface Props {
   text: string;
   onClick?: () => void;
+
+  submit?: boolean;
 }
 
-export default function BorderButton({ text, onClick = () => {} }: Props) {
-  return <BasicButton onClick={onClick}>{text}</BasicButton>;
+export default function BorderButton({
+  text,
+  onClick = () => {},
+  submit = false,
+}: Props) {
+  return (
+    <BasicButton onClick={onClick} type={submit ? "submit" : "button"}>
+      {text}
+    </BasicButton>
+  );
 }
 
 const BasicButton = styled.button`
