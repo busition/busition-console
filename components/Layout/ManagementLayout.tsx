@@ -1,7 +1,7 @@
 import { deleteCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import UserPageHeader from "../Headers/UserPageHeader";
 
@@ -16,6 +16,27 @@ export default function ManagementLayout({
   const [isScroll, setIsScroll] = useState<boolean>(false);
   const router = useRouter();
   const userBox = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (userBox.current?.scrollTop != 0) {
+        setIsScroll(true);
+      } else {
+        setIsScroll(false);
+      }
+    };
+
+    if (userBox.current) {
+      userBox.current.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (userBox.current) {
+        userBox.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
+
   return (
     <MainContainer className="overflow-hidden relative">
       <UserPageHeader
@@ -35,7 +56,7 @@ export default function ManagementLayout({
             <li
               className={`mx-auto px-[16px] text-sm ${
                 navigation == "home" &&
-                "border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center"
+                "border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center font-semibold"
               }`}
             >
               <Link href={"/management"}>
@@ -45,7 +66,7 @@ export default function ManagementLayout({
             <li
               className={`mx-auto px-[16px] text-sm ${
                 navigation == "assignment" &&
-                "border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center"
+                "border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center font-semibold"
               }`}
             >
               <Link href={"/management/driver/assignment"}>
@@ -55,7 +76,7 @@ export default function ManagementLayout({
             <li
               className={`mx-auto px-[16px] text-sm ${
                 navigation == "driver" &&
-                "border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center"
+                "border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center font-semibold"
               }`}
             >
               <Link href={"/management/driver"}>
@@ -65,7 +86,7 @@ export default function ManagementLayout({
             <li
               className={`mx-auto px-[16px] text-sm ${
                 navigation == "org" &&
-                "border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center"
+                "border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center font-semibold"
               }`}
             >
               <Link href={"/management/organization"}>
@@ -82,7 +103,7 @@ export default function ManagementLayout({
               <li
                 className={`${
                   navigation == "home" &&
-                  "border-solid border-r-blue-500 border-r-4"
+                  "border-solid border-r-blue-500 border-r-4 font-semibold"
                 }`}
               >
                 홈
@@ -94,7 +115,7 @@ export default function ManagementLayout({
               <li
                 className={`${
                   navigation == "assignment" &&
-                  "border-solid border-r-blue-500 border-r-4"
+                  "border-solid border-r-blue-500 border-r-4 font-semibold"
                 }`}
               >
                 기사 배정
@@ -106,7 +127,7 @@ export default function ManagementLayout({
               <li
                 className={`${
                   navigation == "driver" &&
-                  "border-solid border-r-blue-500 border-r-4"
+                  "border-solid border-r-blue-500 border-r-4 font-semibold"
                 }`}
               >
                 기사 관리
@@ -118,7 +139,7 @@ export default function ManagementLayout({
               <li
                 className={`${
                   navigation == "org" &&
-                  "border-solid border-r-blue-500 border-r-4"
+                  "border-solid border-r-blue-500 border-r-4 font-semibold"
                 }`}
               >
                 기관 코드

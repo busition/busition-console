@@ -61,15 +61,18 @@ export default function Home() {
             >
               생성하기
             </button>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              무작위로 생성하기
-            </button>
           </div>
         </form>
       </div>
+      <div className="border-2 border-solid rounded-lg flex flex-col px-[24px] py-[24px] mt-[40px] lg:mx-auto lg:w-full lg:max-w-lg"></div>
+      <div className="border-2 border-solid rounded-lg flex flex-col px-[24px] py-[24px] mt-[12px] lg:mx-auto lg:w-full lg:max-w-lg"></div>
+      <div className="border-2 border-solid rounded-lg flex flex-col px-[24px] py-[24px] mt-[12px] lg:mx-auto lg:w-full lg:max-w-lg"></div>
+      <div className="border-2 border-solid rounded-lg flex flex-col px-[24px] py-[24px] mt-[12px] lg:mx-auto lg:w-full lg:max-w-lg"></div>
+      <div className="border-2 border-solid rounded-lg flex flex-col px-[24px] py-[24px] mt-[12px] lg:mx-auto lg:w-full lg:max-w-lg"></div>
+
+      <div className="border-2 border-solid rounded-lg flex flex-col px-[24px] py-[24px] mt-[12px] lg:mx-auto lg:w-full lg:max-w-lg"></div>
+
+      <div className="border-2 border-solid rounded-lg flex flex-col px-[24px] py-[24px] mt-[12px] lg:mx-auto lg:w-full lg:max-w-lg"></div>
     </ManagementLayout>
   );
 }

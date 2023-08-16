@@ -7,7 +7,11 @@ import Button from "../../components/Button/Button";
 import FilledButton from "../../components/Button/FilledButton";
 import ManagementLayout from "../../components/Layout/ManagementLayout";
 import ModalBox from "../../components/Modal/ModalBox";
-import { convertToISO8601, isExpired } from "../../utils/functions";
+import {
+  convertKrTime,
+  convertToISO8601,
+  isExpired,
+} from "../../utils/functions";
 
 interface orgCodeType {
   join_code: string;
@@ -16,7 +20,7 @@ interface orgCodeType {
 }
 
 const Home = ({ join_code, generated_at, expired_at }: orgCodeType) => {
-  console.log(expired_at);
+  console.log(convertKrTime(expired_at));
   const [orgCode, setOrgCode] = useState<orgCodeType>({
     join_code,
     generated_at,
@@ -45,7 +49,7 @@ const Home = ({ join_code, generated_at, expired_at }: orgCodeType) => {
         console.log(data);
         setOrgCode({
           join_code: data.join_code,
-          expired_at: data.expired_at,
+          expired_at: convertKrTime(data.expired_at),
           generated_at: data.generated_at,
         });
         setModalOpen(false);
@@ -142,9 +146,10 @@ export const getServerSideProps: GetServerSideProps<orgCodeType> = async ({
         generated_at: null,
       };
     });
+  console.log(expired_at);
 
   return {
-    props: { join_code, expired_at, generated_at },
+    props: { join_code, expired_at: convertKrTime(expired_at), generated_at },
   };
 };
 

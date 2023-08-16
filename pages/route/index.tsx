@@ -242,8 +242,9 @@ const Route = ({ station_data, route_name }: Props) => {
             </tbody>
           </Table>
           <div className="w-full flex flex-row h-[100px] justify-center items-center gap-[12px] mt-[32px]">
-            <Button text="취소" onClick={() => router.push("/console")} />
             <Button text="저장" primary={true} onClick={() => sendRoute()} />
+
+            <Button text="취소" onClick={() => router.push("/console")} />
           </div>
         </div>
         <div className="w-1/2 h-full rounded shadow-md">

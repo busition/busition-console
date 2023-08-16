@@ -13,13 +13,17 @@ const SignUp = () => {
     type: "",
     msg: "",
   });
+  const [emailAuth, setEmailAuth] = useState<boolean>(true);
 
-  const formList: { state: string; setState: Function; name: string }[] = [
+  const firstFormList: { state: string; setState: Function; name: string }[] = [
     { state: email, setState: setEmail, name: "email" },
     { state: password, setState: setPassword, name: "password" },
-    { state: name, setState: setName, name: "name" },
-    { state: phoneNumber, setState: setPhoneNumber, name: "phone number" },
   ];
+  const secondFormList: { state: string; setState: Function; name: string }[] =
+    [
+      { state: name, setState: setName, name: "name" },
+      { state: phoneNumber, setState: setPhoneNumber, name: "phone number" },
+    ];
 
   const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,26 +82,51 @@ const SignUp = () => {
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleSignUpSubmit}>
-          {formList.map((item, idx) => (
-            <InputBox
-              id={item.name}
-              setStateFunction={item.setState}
-              type={
-                item.name == "email" || item.name == "password"
-                  ? item.name
-                  : "text"
-              }
-              state={item.state}
-              key={item.name}
-            />
-          ))}
+          {!emailAuth &&
+            firstFormList.map((item, idx) => (
+              <InputBox
+                id={item.name}
+                setStateFunction={item.setState}
+                type={
+                  item.name == "email" || item.name == "password"
+                    ? item.name
+                    : "text"
+                }
+                state={item.state}
+                key={item.name}
+              />
+            ))}
+          {emailAuth &&
+            secondFormList.map((item, idx) => (
+              <InputBox
+                id={item.name}
+                setStateFunction={item.setState}
+                type={
+                  item.name == "email" || item.name == "password"
+                    ? item.name
+                    : "text"
+                }
+                state={item.state}
+                key={item.name}
+              />
+            ))}
           <div className="flex flex-col gap-3">
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Sign up
-            </button>
+            {!emailAuth && (
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                이메일 인증하기
+              </button>
+            )}
+            {emailAuth && (
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                회원 가입
+              </button>
+            )}
             {errorMsg.type && (
               <div role="alert">
                 <div className="bg-red-500 text-white font-bold rounded-t px-4 py-2">

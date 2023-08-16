@@ -57,6 +57,16 @@ const Assignment = ({ schedule_data }: homeProps) => {
   //   console.log(schedule_data);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
+  const generateDriver = async () => {
+    const data = await fetch("/api/users/driver-for-org?auth_type=Email", {
+      method: "POST",
+      headers: {
+        accpet: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
   return (
     <ManagementLayout navigation="assignment">
       {schedule_data.map((data) => (
@@ -81,8 +91,12 @@ const Assignment = ({ schedule_data }: homeProps) => {
               </div>
             </div>
             <div className="w-full h-full block">
-              <div className="w-full flex flex-row justify-center">
-                기사 아이디 생성
+              <div className="w-full flex flex-col justify-center items-center gap-[8px]">
+                랜덤으로 기사 아이디 생성
+                <div>
+                  <FilledButton text="생성하기" size="b" />
+                </div>
+                <div></div>
               </div>
             </div>
             <div className="w-full flex flex-row justify-end">
