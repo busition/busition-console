@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export default function ModalBox({ children }: PropsWithChildren) {
   return (
-    <Container className="w-[50vw] h-[70vh] min-h-[250px] min-w-[350px] bg-white shadow-lg rounded border-solid border-2">
+    <Container className="w-[50vw] h-[70vh] min-h-[250px] min-w-[350px] bg-white shadow-lg rounded border-solid border-2 z-50">
       {children}
     </Container>
   );

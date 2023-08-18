@@ -1,3 +1,4 @@
+import { getCookie } from "cookies-next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -27,6 +28,20 @@ export default function RouteBox({
 }: RouteBoxProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const router = useRouter();
+  const handleDelete = async () => {
+    await fetch(`/api/routes/${routeId}` + "?auth_type=Email", {
+      method: "DELETE",
+      headers: {
+        accpet: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getCookie("token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        router.reload();
+      });
+  };
 
   console.log(routeId);
 
@@ -57,7 +72,12 @@ export default function RouteBox({
                 편집하기
               </button>
 
-              <button className="font-semibold text-red-600">삭제하기</button>
+              <button
+                className="font-semibold text-red-600"
+                onClick={handleDelete}
+              >
+                삭제하기
+              </button>
             </div>
           </SmallMenuModal>
         </button>

@@ -28,6 +28,7 @@
     "react-dom": "18.2.0",
     "react-geocode": "^0.2.3",
     "react-sortablejs": "^6.1.4",
+    "recoil": "^0.7.7",
     "socket.io-client": "^4.6.1",
     "sortablejs": "^1.15.0",
     "styled-components": "^5.3.8",

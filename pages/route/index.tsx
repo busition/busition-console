@@ -22,6 +22,7 @@ interface TableItem {
 }
 
 interface Props {
+  route_name: string;
   station_data: {
     station_name: string;
     station_latitude: number;
@@ -31,7 +32,7 @@ interface Props {
 
 let idx = 0;
 
-const Route = ({ station_data }: Props) => {
+const Route = ({ station_data, route_name }: Props) => {
   // console.log(station_data);
   // useState 변수들
   const [open, setOpen] = useState<boolean>(false);
@@ -50,6 +51,7 @@ const Route = ({ station_data }: Props) => {
   // useEffect
   useEffect(() => {
     if (station_data) {
+      setRouteName(route_name);
       setState(
         station_data.map((data) => {
           return {
@@ -66,85 +68,80 @@ const Route = ({ station_data }: Props) => {
 
   // api 관련 함수
   const sendRoute = async () => {
-    const data = await fetch("/api/routes/", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-        authorization: `Bearer ${getCookie("token")}`,
-      },
-      body: JSON.stringify([
+    let data;
+    if (router.query.routeId) {
+      data = await fetch(
+        `/api/routes/` + `${router.query.routeId}?auth_type=Email`,
         {
-          name: routeName,
-          description: "",
-          shuttle_direction: 0,
-          day_of_week: [],
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+            authorization: `Bearer ${getCookie("token")}`,
+          },
+          body: JSON.stringify([
+            {
+              name: routeName,
+              description: "",
+              shuttle_direction: 0,
+              day_of_week: [],
+            },
+          ]),
+        }
+      ).then((res) => res.json());
+    } else {
+      data = await fetch("/api/routes/?auth_type=Email", {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+          authorization: `Bearer ${getCookie("token")}`,
         },
-      ]),
-    }).then((res) => res.json());
+        body: JSON.stringify([
+          {
+            name: routeName,
+            description: "",
+            shuttle_direction: 0,
+            day_of_week: [],
+          },
+        ]),
+      }).then((res) => res.json());
+    }
 
-    const response = await fetch("/api/stations/", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-        authorization: `Bearer ${getCookie("token")}`,
-      },
-      body: JSON.stringify(
-        state.map((item, index) => {
-          return {
-            route_id: data.route_id,
-            station_name: item.stationName,
-            station_latitude: item.latlng[0],
-            station_longitude: item.latlng[1],
-            stopping_order: index + 1,
-          };
-        })
-      ),
-    }).then((res) => res.json());
+    const response = await fetch(
+      `/api/stations/recreate?route_id=${data.route_id}&auth_type=Email`,
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+          authorization: `Bearer ${getCookie("token")}`,
+        },
+        body: JSON.stringify(
+          state.map((item, index) => {
+            return {
+              station_name: item.stationName,
+              station_latitude: item.latlng[0],
+              station_longitude: item.latlng[1],
+              stopping_order: index + 1,
+              arrival_time: [],
+              departure_time: [],
+            };
+          })
+        ),
+      }
+    )
+      .then((res) => res.json())
+      .then((tmp) => router.push("/console"));
     console.log(response);
   };
 
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
-      <div className="flex flex-col w-full h-full">
-        <div className="w-full h-1/2 rounded shadow-md">
-          <LoadScriptNext
-            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-          >
-            <GoogleMap
-              mapContainerStyle={{ height: "100%", width: "100%" }}
-              center={{
-                lat: 37.55,
-                lng: 127,
-              }}
-              zoom={12}
-            >
-              {state
-                .filter((it) => it.latlng.length !== 0)
-                .map((it) => (
-                  <MarkerF
-                    position={{ lat: it.latlng[0], lng: it.latlng[1] }}
-                    onClick={() => setActiveMarker(it.id)}
-                  >
-                    {it.id == activeMarker && (
-                      <InfoWindowF
-                        position={{ lat: it.latlng[0], lng: it.latlng[1] }}
-                        onCloseClick={() => setActiveMarker(-1)}
-                      >
-                        <div className="">
-                          <p>{it.stationName}</p>
-                        </div>
-                      </InfoWindowF>
-                    )}
-                  </MarkerF>
-                ))}
-            </GoogleMap>
-          </LoadScriptNext>
-        </div>
+      <div className="flex flex-row w-full h-full">
         <div
-          className="flex flex-col h-1/2
-       w-full px-20 py-20 overflow-y-scroll"
+          className="flex flex-col h-full
+       w-1/2 px-20 py-20 overflow-y-scroll shadow-md"
         >
           <div className="w-full flex flex-row justify-center items-center gap-[12px] my-[20px]">
             <label className="" htmlFor="name">
@@ -244,12 +241,48 @@ const Route = ({ station_data }: Props) => {
               </TableRow>
             </tbody>
           </Table>
+          <div className="w-full flex flex-row h-[100px] justify-center items-center gap-[12px] mt-[32px]">
+            <Button text="저장" primary={true} onClick={() => sendRoute()} />
+
+            <Button text="취소" onClick={() => router.push("/console")} />
+          </div>
+        </div>
+        <div className="w-1/2 h-full rounded shadow-md">
+          <LoadScriptNext
+            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+          >
+            <GoogleMap
+              mapContainerStyle={{ height: "100%", width: "100%" }}
+              center={{
+                lat: 37.55,
+                lng: 127,
+              }}
+              zoom={12}
+            >
+              {state
+                .filter((it) => it.latlng.length !== 0)
+                .map((it) => (
+                  <MarkerF
+                    position={{ lat: it.latlng[0], lng: it.latlng[1] }}
+                    onClick={() => setActiveMarker(it.id)}
+                  >
+                    {it.id == activeMarker && (
+                      <InfoWindowF
+                        position={{ lat: it.latlng[0], lng: it.latlng[1] }}
+                        onCloseClick={() => setActiveMarker(-1)}
+                      >
+                        <div className="">
+                          <p>{it.stationName}</p>
+                        </div>
+                      </InfoWindowF>
+                    )}
+                  </MarkerF>
+                ))}
+            </GoogleMap>
+          </LoadScriptNext>
         </div>
       </div>
-      <div className="w-full flex flex-row h-[100px] justify-center items-center gap-[12px]">
-        <Button text="취소" onClick={() => router.push("/console")} />
-        <Button text="저장" primary={true} onClick={() => sendRoute()} />
-      </div>
+
       <Modal
         isOpen={open}
         handleCloseModal={() => setOpen(false)}
@@ -436,7 +469,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
   // routeId로 조회
   if (routeId) {
-    const { station_data } = await fetch(
+    const { station_data, route_name } = await fetch(
       `https://api.dev2.busition.com/latest/routes/${routeId}`,
       {
         method: "GET",
@@ -448,7 +481,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       }
     ).then((response) => response.json());
     return {
-      props: { station_data },
+      props: { station_data, route_name },
     };
   }
   return {
