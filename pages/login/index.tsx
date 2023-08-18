@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import GoogleLoginButton from "../../components/Button/GoogleLoginButton";
 import { jsonToFormEncoded } from "../../utils/functions";
 import { deleteCookie, hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { getSpin } from "../../utils/states";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,9 @@ const LoginPage = () => {
     type: "",
     msg: "",
   });
+  const [isSpin, setIsSpin] = useRecoilState(getSpin);
   const router = useRouter();
+  const refUrl: string = router.query.ref as string;
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,6 +23,7 @@ const LoginPage = () => {
       type: "",
       msg: "",
     });
+    setIsSpin(true);
 
     fetch("/api/auth/users/token?busition_platform=Busition-Console", {
       method: "POST",
@@ -43,11 +47,16 @@ const LoginPage = () => {
         return res.json();
       })
       .then((data: { access_token: string; token_type: string }) => {
+        setIsSpin(false);
         if (hasCookie("token")) {
           deleteCookie("token");
         }
         setCookie("token", data.access_token);
-        router.replace("/console");
+        if (refUrl) {
+          router.replace(refUrl);
+        } else {
+          router.replace("/console");
+        }
       })
       .catch((error) => {
         console.log(error);

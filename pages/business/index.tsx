@@ -281,7 +281,7 @@ export default function Home() {
               <div className="w-full flex flex-row justify-end items-center">
                 <p className="text-2xl">월 {formatNumber(cardData.price)}원</p>
               </div>
-              <div className="my-[24px] w-full felx flex-col gap-[8px]">
+              <div className="my-[24px] w-full flex flex-col gap-[8px]">
                 <div className="w-full flex flex-row justify-between items-center gap-[4px]">
                   <div className="flex flex-row justify-center items-center">
                     <input id="service" type={"checkbox"} />
@@ -298,6 +298,11 @@ export default function Home() {
                   >
                     &gt;
                   </button>
+                </div>
+                <div className="w-full mt-[4px]">
+                  <h3 className="text-sm text-[#3b4859]">
+                    {`버지션(Bustion)은 모든 거래에 대한 책임과 배송,교환,환불,민원등의 처리는 버지션(Busition)에서 진행합니다. 민원 담당자 김준혁 / 연락처 010-5942-1248`}
+                  </h3>
                 </div>
               </div>
               <div className="w-full flex flex-row justify-end items-center">
@@ -330,12 +335,17 @@ export default function Home() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  res,
+  resolvedUrl,
+}) => {
+  // console.log(resolvedUrl);
   if (!hasCookie("token", { req, res })) {
     return {
       props: {},
       redirect: {
-        destination: "/login",
+        destination: `/login/?ref=${resolvedUrl}`,
         permanent: false,
       },
     };
@@ -343,7 +353,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return {
       props: {},
       redirect: {
-        destination: "/login",
+        destination: `/login/?ref=${resolvedUrl}`,
         permanent: false,
       },
     };
