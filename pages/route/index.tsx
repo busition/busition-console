@@ -73,7 +73,7 @@ const Route = ({ station_data, route_name }: Props) => {
       data = await fetch(
         `/api/routes/` + `${router.query.routeId}?auth_type=Email`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             accept: "application/json",
             "Content-Type": "application/json",
