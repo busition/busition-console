@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+const koreaTime = 9 * 60 * 60 * 1000;
 
 /**
  * 입력받은 문자열의 첫 번째 문자를 대문자로 만들고 나머지는 소문자로 만들어서 반환시켜 줌.
@@ -43,4 +44,36 @@ export function isExpired(token: string): boolean {
   } else {
     return false;
   }
+}
+
+/**
+ * 'yyyy-mm-dd'형식의 스트링을 ISO 8601 형식의 스트링으로 반환해주는 함수.
+ * @param dateString 'yyyy-mm-dd' 형식의 스트링 값을 받습니다.
+ * @returns ISO 8601 형식으로 표현된 스트링 값을 리턴합니다.
+ */
+export function convertToISO8601(dateString: string): string {
+  console.log(dateString);
+  const date = new Date(dateString);
+  // date.setDate(date.getTime() - koreaTime);
+
+  // 유효한 날짜인지 검사
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date string provided.");
+  }
+
+  return date.toISOString().slice(0, -5) + "Z";
+}
+
+/**
+ * iso 표준시를 한국 표준시로 반환해주는 함수
+ * @param dateString iso 형식의 스트링 값
+ * @returns 한국 표준시로 반환함
+ */
+export function convertKrTime(dateString: string): string {
+  console.log(dateString);
+
+  const date = new Date(dateString + "Z");
+  // date.setDate(date.getTime() + koreaTime);
+
+  return date.toString();
 }

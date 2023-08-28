@@ -4,15 +4,21 @@ interface Props {
   text: string;
   size?: "b" | "m" | "s";
   handleOnclick?: () => void;
+  submit?: boolean;
 }
 
 const FilledButton = ({
   text,
   size = "m",
   handleOnclick = () => {},
+  submit = false,
 }: Props) => {
   return (
-    <StyledButton size={size} onClick={handleOnclick}>
+    <StyledButton
+      size={size}
+      onClick={handleOnclick}
+      type={submit ? "submit" : "button"}
+    >
       {text}
     </StyledButton>
   );

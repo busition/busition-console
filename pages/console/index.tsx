@@ -17,7 +17,8 @@ interface ConsoleHomeProps {
   socket: Socket;
   schedule_count: number;
   schedule_data: {
-    route_uuid: string;
+    id: number;
+    name: string;
     departure_point: string;
     destination: string;
     shuttle_direction: number;
@@ -193,6 +194,7 @@ const Slider = ({
 };
 
 const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
+  console.log(schedule_data);
   const [center, setCenter] = useState<{ lat: number; lng: number }>({
     lat: 37.5665,
     lng: 126.978,
@@ -317,24 +319,24 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
           <div className="flex flex-col gap-[20px] px-[24px] py-[32px] justify-center items-center">
             {schedule_data.map((item, idx) => (
               <RouteBox
-                routeId={item.route_uuid}
+                routeId={item.id}
                 destStation={item.destination}
                 startStation={item.departure_point}
                 direction={item.shuttle_direction}
                 onClickFunction={getRoute}
                 key={idx}
-                index={idx + 1}
+                name={item.name}
                 sliderHandler={setOpenSlider}
                 handleSelected={setSelectedRoute}
               />
             ))}
             <RouteBox
-              routeId={"1"}
+              routeId={1}
               destStation={"test"}
               startStation={"test"}
               direction={1}
               onClickFunction={testRoute}
-              index={-1}
+              name={"test"}
               sliderHandler={setOpenSlider}
               handleSelected={setSelectedRoute}
             />

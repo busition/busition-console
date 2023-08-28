@@ -1,143 +1,114 @@
-import { deleteCookie, getCookie, hasCookie } from "cookies-next";
+import { getCookie, hasCookie } from "cookies-next";
 import { GetServerSideProps } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import Button from "../../components/Button/Button";
 import FilledButton from "../../components/Button/FilledButton";
-import UserPageHeader from "../../components/Headers/UserPageHeader";
-import { isExpired } from "../../utils/functions";
+import ManagementLayout from "../../components/Layout/ManagementLayout";
+import ModalBox from "../../components/Modal/ModalBox";
+import {
+  convertKrTime,
+  convertToISO8601,
+  isExpired,
+} from "../../utils/functions";
 
-const Home = () => {
-  const [isScroll, setIsScroll] = useState<boolean>(false);
-  const router = useRouter();
-  const userBox = useRef<HTMLDivElement>(null);
-  const [orgCode, setOrgCode] = useState<{
-    join_code: string;
-    generated_at: string;
-    expires_at: string;
-  }>({ join_code: "", generated_at: "", expires_at: "" });
+interface orgCodeType {
+  join_code: string;
+  generated_at: string;
+  expired_at: string;
+}
 
-  const getOrgCode = async () => {
-    await fetch("/api/organizations/join-code", {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getCookie("token")}`,
-      },
-    })
+const Home = ({ join_code, generated_at, expired_at }: orgCodeType) => {
+  console.log(convertKrTime(expired_at));
+  const [orgCode, setOrgCode] = useState<orgCodeType>({
+    join_code,
+    generated_at,
+    expired_at,
+  });
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [genDate, setGenDate] = useState<string>("");
+
+  const generateOrgCode = async () => {
+    // console.log(JSON.stringify({ expired_at: convertToISO8601(genDate) }));
+    await fetch(
+      `/api/organizations/join-code${
+        genDate ? `?expired_at=${convertToISO8601(genDate)}&` : "?"
+      }force_recreate=true&auth_type=Email`,
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         setOrgCode({
           join_code: data.join_code,
-          expires_at: data.expires_at,
+          expired_at: convertKrTime(data.expired_at),
           generated_at: data.generated_at,
         });
+        setModalOpen(false);
       });
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (userBox.current) {
-        if (userBox.current.scrollTop == 0) {
-          setIsScroll(false);
-        } else {
-          setIsScroll(true);
-        }
-      }
-    };
-
-    if (userBox.current) {
-      userBox.current.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (userBox.current) {
-        userBox.current?.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
-
   return (
-    <MainContainer className="overflow-hidden relative">
-      <UserPageHeader
-        isScroll={isScroll}
-        handleClick={() => {
-          deleteCookie("token");
-          router.reload();
-        }}
-      />
-      <div
-        className={`w-full block z-10 mt-[-10px] pt-[10px] lg:hidden ${
-          isScroll ? "shadow-md" : ""
-        } border-solid border-b`}
-      >
-        <nav>
-          <ul className="w-full flex flex-row h-[48px] items-center">
-            <li className="mx-auto px-[16px] text-sm ">
-              <Link href={"/management"}>
-                <a>홈</a>
-              </Link>
-            </li>
-            <li className="mx-auto px-[16px] text-sm">
-              <Link href={"/management/driver"}>
-                <a>기사 배정</a>
-              </Link>
-            </li>
-            <li className="mx-auto px-[16px] text-sm border-solid border-b-blue-500 border-b-4 h-full flex flex-col justify-center">
-              <Link href={"/management/organization"}>
-                <a>기관 코드</a>
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <SideNav className="border-solid border-r">
-        <ul>
-          <Link href={"/management"}>
-            <a>
-              <li className="">홈</li>
-            </a>
-          </Link>
-          <Link href={"/management/driver"}>
-            <a>
-              <li>기사 배정</li>
-            </a>
-          </Link>
-          <Link href={"/management/organization"}>
-            <a>
-              <li className="border-solid border-r-blue-500 border-r-4">
-                기관 코드
-              </li>
-            </a>
-          </Link>
-        </ul>
-      </SideNav>
-      <Container className="overflow-y-scroll block" ref={userBox}>
-        <div className="lg:px-[48px] lg:max-w-[1120px] max-w-[840px] px-[24px] mx-auto h-full flex flex-col justify-center items-center">
-          <div className="flex flex-col items-center">
-            <h2>기관 코드를 생성하러면 밑에 버튼을 눌러주세요.</h2>
-            <div className="mt-[12px]">
-              <FilledButton text="생성" handleOnclick={getOrgCode} />
-            </div>
-            {orgCode.join_code && (
-              <div className="mt-[20px] flex flex-col items-center">
-                <QRCodeSVG value={orgCode.join_code} />
-
-                <p className="mt-[12px]">{`해당 코드는 ${orgCode.expires_at}까지 사용가능합니다.`}</p>
-              </div>
-            )}
-          </div>
+    <ManagementLayout navigation="org">
+      <div className="flex flex-col items-center">
+        <div className="h-[30%] flex flex-col justify-center items-center pt-[24px]">
+          <p className="text-2xl font-semibold">
+            버지션 기관 코드 관리 페이지 입니다.
+          </p>
+          <p className="mt-5">
+            여기서 기관 코드를 확인할 수 있으며, 만료되었을 시 기관코드를
+            재생성할 수 있습니다.
+          </p>
         </div>
-      </Container>
-    </MainContainer>
+        <div className="mt-[12px]">
+          <FilledButton text="생성" handleOnclick={() => setModalOpen(true)} />
+        </div>
+        {orgCode.join_code && (
+          <div className="mt-[20px] flex flex-col items-center">
+            <QRCodeSVG value={orgCode.join_code} />
+
+            <p className="mt-[12px]">{`해당 코드는 ${orgCode.expired_at}까지 사용가능합니다.`}</p>
+          </div>
+        )}
+      </div>
+      {modalOpen && (
+        <ModalBox>
+          <div className="h-full w-full flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center gap-[8px] w-full h-full">
+              <label htmlFor="date">
+                만료 날짜를 선택해주세요.(날짜를 공백으로 두면 만료기한이 없는
+                코드가 생성됩니다.)
+              </label>
+              <input
+                type="date"
+                id="date"
+                value={genDate}
+                onChange={(e) => setGenDate(e.target.value)}
+              />
+              <FilledButton text="생성하기" handleOnclick={generateOrgCode} />
+            </div>
+            <div className="w-full flex felx-row justify-end">
+              <Button text="닫기" onClick={() => setModalOpen(false)} />
+            </div>
+          </div>
+        </ModalBox>
+      )}
+    </ManagementLayout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps<orgCodeType> = async ({
+  req,
+  res,
+}) => {
   if (!hasCookie("token", { req, res })) {
     return {
       props: {},
@@ -155,44 +126,31 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     };
   }
+  const token = getCookie("token", { req, res });
+  const { join_code, expired_at, generated_at }: orgCodeType = await fetch(
+    "https://api.dev2.busition.com/latest/organizations/join-code?auth_type=Email",
+    {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+    .then((res) => res.json())
+    .catch((err) => {
+      return {
+        join_code: null,
+        expired_at: null,
+        generated_at: null,
+      };
+    });
+  console.log(expired_at);
+
   return {
-    props: {},
+    props: { join_code, expired_at: convertKrTime(expired_at), generated_at },
   };
 };
-
-const MainContainer = styled.div`
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Container = styled.div`
-  height: 100%;
-
-  @media (min-width: 1024px) {
-    margin-left: 280px;
-  }
-`;
-
-const SideNav = styled.nav`
-  position: absolute;
-  top: 64px;
-  left: 0;
-  z-index: 1;
-  width: 280px;
-  height: 100%;
-  padding-top: 20px;
-
-  @media (max-width: 1024px) {
-    display: none;
-  }
-
-  li {
-    padding: 10px 0;
-    padding-left: 24px;
-    padding-right: 16px;
-  }
-`;
 
 export default Home;
