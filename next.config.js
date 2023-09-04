@@ -28,7 +28,7 @@ const nextConfig = {
       },
       {
         source: "/api/newOrder",
-        destination: "http://localhost:5050/v1/inicis/new/order",
+        destination: "https://localhost:5050/v1/inicis/new/order",
       },
     ];
   },

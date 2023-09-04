@@ -1,10 +1,17 @@
 import Image from "next/image";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { getSpin } from "../../utils/states";
 
 export default function BasicSpinner() {
   const [isSpin, setIsSpin] = useRecoilState<boolean>(getSpin);
+
+  useEffect(() => {
+    setIsSpin(false);
+
+    return () => {};
+  }, []);
 
   return (
     <>

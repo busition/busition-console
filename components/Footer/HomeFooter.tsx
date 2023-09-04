@@ -11,7 +11,7 @@ export default function HomeFooter() {
         <span className="bar break-mobile" />
         사업자등록번호 : 117-20-13096
         <p className="text-[#3b4859]">
-          연락처 : 010-5942-1248
+          연락처 : 070-4571-9849
           <span className="bar break-mobile" />
           이메일 : contact@busition.io
         </p>

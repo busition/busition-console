@@ -15,17 +15,17 @@ const Home: NextPage = () => {
     if (type == "android") {
       if (id == "driver") {
         window.open(
-          "https://play.google.com/store/apps/details?id=com.busition.driver"
+          "https://play.google.com/store/apps/details?id=io.busition.driver",
         );
       } else if (id == "mate") {
         window.open(
-          "https://play.google.com/store/apps/details?id=com.busition.user"
+          "https://play.google.com/store/apps/details?id=io.busition.mate",
         );
       }
     } else if (type == "apple") {
       if (id == "mate") {
         window.open(
-          "https://drive.google.com/file/d/1cFUXjQKzAKc3-E_1TapGMXaby0wiT_B7/view?usp=sharing"
+          "https://apps.apple.com/us/app/%EB%B2%84%EC%A7%80%EC%85%98-mate/id6462874072",
         );
       }
     }
