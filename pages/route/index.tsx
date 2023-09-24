@@ -7,6 +7,7 @@ import {
   LoadScriptNext,
   MarkerF,
   InfoWindowF,
+  useJsApiLoader,
 } from "@react-google-maps/api";
 import { ReactSortable } from "react-sortablejs";
 import Button from "../../components/Button/Button";
@@ -47,7 +48,10 @@ const Route = ({ station_data, route_name }: Props) => {
   const [activeMarker, setActiveMarker] = useState(-1);
   const router = useRouter();
   const [routeName, setRouteName] = useState<string>("");
-
+  // google maps
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+  });
   // useEffect
   useEffect(() => {
     if (station_data) {
@@ -248,9 +252,7 @@ const Route = ({ station_data, route_name }: Props) => {
           </div>
         </div>
         <div className="w-1/2 h-full rounded shadow-md">
-          <LoadScriptNext
-            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-          >
+          {isLoaded && (
             <GoogleMap
               mapContainerStyle={{ height: "100%", width: "100%" }}
               center={{
@@ -279,7 +281,7 @@ const Route = ({ station_data, route_name }: Props) => {
                   </MarkerF>
                 ))}
             </GoogleMap>
-          </LoadScriptNext>
+          )}
         </div>
       </div>
 
@@ -297,7 +299,7 @@ const Route = ({ station_data, route_name }: Props) => {
           setOpen(false);
         }}
       >
-        <GeocodeContainer handlePos={setPos} />
+        <GeocodeContainer handlePos={setPos} key={"googlemap"} />
       </Modal>
     </div>
   );

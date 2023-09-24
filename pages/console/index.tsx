@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import ScheduleBox from "../../components/Console/ScheduleBox";
 import FilledButton from "../../components/Button/FilledButton";
-import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, useJsApiLoader } from "@react-google-maps/api";
 import RouteRenderer from "../../components/RouterRenderer";
 import { GetServerSideProps } from "next";
 import { deleteCookie, getCookie, hasCookie } from "cookies-next";
@@ -199,6 +199,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
     lat: 37.5665,
     lng: 126.978,
   });
+  const [mapRefresh, setMapRefresh] = useState(false);
   const [path, setPath] = useState<number[][]>([]);
   const [stationData, setStationData] = useState<StationDataType[]>([]);
   const router = useRouter();
@@ -208,6 +209,9 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({
     lat: 37,
     lng: 127,
+  });
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   });
 
   const testRoute = async () => {
@@ -279,6 +283,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
 
   useEffect(() => {
     socket.connect();
+    setMapRefresh(true);
     return () => {
       if (socket !== null && socket.connected) {
         socket.disconnect();
@@ -350,13 +355,11 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
           </div>
         </div>
         <div className="relative z-0 w-full h-full">
-          <LoadScript
-            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-          >
+          {isLoaded && (
             <GoogleMap
               center={center}
               zoom={12}
-              mapContainerStyle={{ height: "100%", width: "100%" }}
+              mapContainerStyle={{ width: "100%", height: "100%" }}
             >
               <RouteRenderer
                 markers={stationData}
@@ -364,7 +367,7 @@ const ConsoleHome = ({ schedule_count, schedule_data }: ConsoleHomeProps) => {
                 nowBusPos={socketData}
               />
             </GoogleMap>
-          </LoadScript>
+          )}
           {/* <div className="absolute bottom-[50px] left-1/2 w-[400px] h-[80px] bg-white ml-[-200px] mt-[-40px] rounded-lg shadow-lg" /> */}
         </div>
         <Slider
