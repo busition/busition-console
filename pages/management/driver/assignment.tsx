@@ -90,15 +90,7 @@ const Assignment = ({ schedule_data }: homeProps) => {
                 <BorderButton text="추가" />
               </div>
             </div>
-            <div className="w-full h-full block">
-              <div className="w-full flex flex-col justify-center items-center gap-[8px]">
-                랜덤으로 기사 아이디 생성
-                <div>
-                  <FilledButton text="생성하기" size="b" />
-                </div>
-                <div></div>
-              </div>
-            </div>
+            <div className="w-full h-full block"></div>
             <div className="w-full flex flex-row justify-end">
               <Button text="닫기" onClick={() => setModalOpen(false)} />
             </div>
