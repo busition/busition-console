@@ -8,15 +8,11 @@ export default function HomeFooter() {
         상호명 : 버지션 (Busition)
         <span className="bar" />
         대표자명 : 우정헌
-        <span className="bar break-mobile" />
-        사업자등록번호 : 117-20-13096
         <p className="text-[#3b4859]">
           연락처 : 070-4571-9849
           <span className="bar break-mobile" />
           이메일 : contact@busition.io
         </p>
-        사업장 주소 : 광주광역시 서구 하남대로710번길 20, 510동 801호
-        <p className="text-[#3b4859]">과세여부 : 일반과세자</p>
       </Address>
       <p className="text-sm" style={{ color: "rgba(59, 72, 89, 0.6)" }}>
         개인정보관리책임자 : 유경민
