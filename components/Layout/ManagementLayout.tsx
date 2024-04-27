@@ -149,7 +149,7 @@ export default function ManagementLayout({
         </ul>
       </SideNav>
       <Container className="overflow-y-scroll block" ref={userBox}>
-        <div className="lg:px-[48px] lg:max-w-[1120px] max-w-[840px] px-[24px] mx-auto">
+        <div className="lg:px-[48px] lg:max-w-[1120px] max-w-[840px] px-[24px] mx-auto py-[24px]">
           {children}
         </div>
       </Container>
