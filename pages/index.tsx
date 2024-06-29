@@ -1,11 +1,10 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Button from "../components/Button/Button";
 import HomeHeader from "../components/Headers/HomeHeader";
-import styled from "styled-components";
 import HomeFooter from "../components/Footer/HomeFooter";
 
 const Home: NextPage = () => {
