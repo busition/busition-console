@@ -1,12 +1,11 @@
-import "../styles/globals.css";
+import { RecoilRoot } from "recoil";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BusitionConsoleProvider } from "../components/context/context";
+import BasicSpinner from "../components/Spinner/BasicSpinner";
 import { prefix } from "../config/config";
 import type { AppProps } from "next/app";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import BasicSpinner from "../components/Spinner/BasicSpinner";
-import { RecoilRoot, useRecoilState } from "recoil";
-import { useEffect } from "react";
-import { getSpin } from "../utils/states";
+
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
