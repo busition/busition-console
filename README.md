@@ -154,6 +154,12 @@ The repository includes a GitHub Pages deployment script, but the application al
 - required environment variables are available
 - the static export strategy still matches the routes you need
 
+## License
+
+This repository is licensed under the GNU Affero General Public License v3.0 only (`AGPL-3.0-only`). See the `LICENSE` file for the full text.
+
+Unless otherwise noted, that license applies to the source code in this repository. Third-party names, logos, store badges, and other trademarked assets remain subject to their respective owners' rights.
+
 ## Status
 
 This repository is best described as an active internal console project rather than a polished public starter. It already contains the core operator workflows, but several screens still need cleanup, translation, and completion.
