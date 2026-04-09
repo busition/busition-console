@@ -9,9 +9,7 @@ export default function HomeFooter() {
         <span className="bar" />
         대표자명 : 우정헌
         <p className="text-[#3b4859]">
-          연락처 : 070-4571-9849
-          <span className="bar break-mobile" />
-          이메일 : contact@busition.io
+          이메일 : contact@wookingwoo.com
         </p>
       </Address>
       <p className="text-sm" style={{ color: "rgba(59, 72, 89, 0.6)" }}>
